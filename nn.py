@@ -24,6 +24,7 @@ class NN:
         # Every layer (but not the input layer) will have a value to add called a bias
 
         # Now to set up the neural network multipliers (weights) and constants (biases)
+
         self.input_set = input_set
         self.weights1 = np.random.rand(3,4)
         self.biases1 = np.random.rand(4,)
@@ -48,6 +49,7 @@ class NN:
     def calc_error(self):
         self.error = np.subtract(self.scores,self.input_set)
         self.error = np.square(self.error)
+        print("Error= ", self.error)
 
     def back_prop(self):
         print("backprop tbd")
@@ -73,6 +75,7 @@ if __name__ == '__main__':
     mynn = NN(input_set,labels)
 
     mynn.feedforward()
+    mynn.calc_error()
 
 
 
