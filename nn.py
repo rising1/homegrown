@@ -11,7 +11,7 @@ class NN:
         input_size = 3  # np.shape(input_set)[1]
 
         # We will build a hidden 2nd layer of 4 points
-        hidden_size = 4
+        # hidden_size = 4
 
         # Output layer is 1 point
         output_size = 1 # np.shape(labels)[1]
@@ -26,10 +26,10 @@ class NN:
         # Now to set up the neural network multipliers (weights) and constants (biases)
 
         self.input_set = input_set
-        self.weights1 = np.random.rand(3,4)
-        self.biases1 = np.random.rand(4,)
-        self.weights2 = np.random.rand(4,1)
-        self.biases2 = np.random.rand(1,)
+        self.weights1 = np.random.rand(3,1)
+        self.biases1 = np.random.rand(1,)
+        # self.weights2 = np.random.rand(4,1)
+        # self.biases2 = np.random.rand(1,)
         self.targets = targets
 
         # Now multiply the input values by the weights and apply a signal strength test to each
@@ -42,24 +42,22 @@ class NN:
         # multiply by weights and add bias
         self.z1 = self.input_set.dot(self.weights1) + self.biases1
         self.a1 = np.maximum(0,self.z1) # this is the activation function
-        self.z2 = self.a1.dot(self.weights2) + self.biases2
-        self.a2 = np.maximum(0,self.z2)
-        self.scores = self.a2
+        # self.z2 = self.a1.dot(self.weights2) + self.biases2
+        # self.a2 = np.maximum(0,self.z2)
+        self.scores = self.a1
         print("scores= " , self.scores)
 
     def calc_error(self):
         self.error = np.subtract(self.scores,self.targets)
         self.error = np.square(self.error)
+        self.error = np.sqrt(self.error)
         print("Error= ", self.error)
 
     def back_prop(self):
         # back propagation chain rule calculus
-        # Second layer of weights
-        # d(error)/d(scores) x d(scores)/d(z2) x d(z2)/d(weights2)
-        errorgrad = 2 * (np.sqrt(self.error))
-        print("errorgrad= ",errorgrad)
-        relugrad = self.z2 > 0
-        print("relugrad= ", relugrad)
+        inputT = np.transpose(self.input_set)
+        eXinput = np.dot(self.error,inputT)
+        deltaW = 2/(np.shape(self.input_set)[0])*np.sum(eXinput)
 
 
 
