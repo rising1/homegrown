@@ -38,18 +38,20 @@ class NN:
 
 
 
-    def feedforward(self):
+    def feedforward(self, batch):
         # multiply by weights and add bias
-        self.z1 = self.input_set.dot(self.weights1) + self.biases1
+        self.z1 = batch.dot(self.weights1) + self.biases1
         self.a1 = np.maximum(0,self.z1) # this is the activation function
         # self.z2 = self.a1.dot(self.weights2) + self.biases2
         # self.a2 = np.maximum(0,self.z2)
         self.scores = self.a1
-        print("scores= " , self.scores)
+        print("scores= " , self.scores, " scores shape= ", np.shape(self.scores))
 
     def calc_error(self):
         self.error = np.subtract(self.scores,self.targets)
+        print(np.shape(self.error))
         self.error = np.square(self.error)
+        print(np.shape(self.error))
         self.error = np.sqrt(self.error)
         print("Error= ", self.error)
 
@@ -82,9 +84,11 @@ if __name__ == '__main__':
 
     mynn = NN(input_set,labels)
 
-    mynn.feedforward()
-    mynn.calc_error()
-    mynn.back_prop()
+    for batch in input_set:
+        mynn.feedforward(batch)
+        mynn.calc_error()
+        mynn.back_prop()
+
 
 
 
