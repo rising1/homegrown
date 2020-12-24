@@ -58,6 +58,7 @@ class NN:
         inputT = np.transpose(self.input_set)
         eXinput = np.dot(self.error,inputT)
         deltaW = 2/(np.shape(self.input_set)[0])*np.sum(eXinput)
+        print("deltaW= ",deltaW)
 
 
 
