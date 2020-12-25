@@ -27,7 +27,9 @@ class NN:
 
         self.input_set = input_set
         self.weights1 = np.random.rand(3,1)
+        print("weights= ",self.weights1)
         self.biases1 = np.random.rand(1,)
+        print("bias= ",self.biases1)
         # self.weights2 = np.random.rand(4,1)
         # self.biases2 = np.random.rand(1,)
         self.targets = targets
@@ -47,7 +49,7 @@ class NN:
         self.scores = self.a1
         print("scores= " , self.scores, " scores shape= ", np.shape(self.scores))
 
-    def calc_error(self):
+    def calc_error(self,batch):
         self.error = np.subtract(self.scores,self.targets)
         print(np.shape(self.error))
         self.error = np.square(self.error)
