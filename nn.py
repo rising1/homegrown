@@ -49,7 +49,7 @@ class NN:
         self.scores = self.a1
         print("scores= " , self.scores, " scores shape= ", np.shape(self.scores))
 
-    def calc_error(self,batch):
+    def calc_error(self):
         self.error = np.subtract(self.scores,self.targets)
         print(np.shape(self.error))
         self.error = np.square(self.error)
@@ -57,11 +57,12 @@ class NN:
         self.error = np.sqrt(self.error)
         print("Error= ", self.error)
 
-    def back_prop(self):
+    def back_prop(self,batch):
         # back propagation chain rule calculus
-        inputT = np.transpose(self.input_set)
+        inputT = np.transpose(batch)
+        print("batchT= ",inputT)
         eXinput = np.dot(self.error,inputT)
-        deltaW = 2/(np.shape(self.input_set)[0])*np.sum(eXinput)
+        deltaW = 2/(np.shape(batch)[1])*np.sum(eXinput)
         print("deltaW= ",deltaW)
 
 
@@ -89,7 +90,7 @@ if __name__ == '__main__':
     for batch in input_set:
         mynn.feedforward(batch)
         mynn.calc_error()
-        mynn.back_prop()
+        mynn.back_prop(batch)
 
 
 
