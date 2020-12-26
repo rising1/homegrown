@@ -51,16 +51,18 @@ class NN:
 
     def calc_error(self):
         self.error = (self.targets - self.scores) **2
+        print("Error= ", self.error)
         self.error = np.sum(np.sqrt(self.error))
         print("Error= ", self.error)
 
     def back_prop(self,batch):
         # back propagation chain rule calculus
-        inputT = np.transpose(batch)
+        print("batchT= ", batch)
+        inputT = np.reshape(batch,[3,1])
         print("batchT= ",inputT)
-        #eXinput = np.dot(self.error,inputT)
-        #deltaW = 2/(np.shape(batch)[1])*np.sum(eXinput)
-        #print("deltaW= ",deltaW)
+        eXinput = np.dot(self.error,inputT)
+        deltaW = 2/(np.shape(batch)[0])*np.sum(eXinput)
+        print("deltaW= ",deltaW)
 
 
 
