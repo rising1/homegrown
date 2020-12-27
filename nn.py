@@ -27,11 +27,7 @@ class NN:
 
         self.input_set = input_set
         self.weights1 = np.random.rand(3,1)
-        print("weights= ",self.weights1)
         self.biases1 = np.random.rand(1,)
-        print("bias= ",self.biases1)
-        # self.weights2 = np.random.rand(4,1)
-        # self.biases2 = np.random.rand(1,)
         self.targets = targets
 
         # Now multiply the input values by the weights and apply a signal strength test to each
@@ -44,25 +40,22 @@ class NN:
         # multiply by weights and add bias
         self.z1 = batch.dot(self.weights1) + self.biases1
         self.a1 = np.maximum(0,self.z1) # this is the activation function
-        # self.z2 = self.a1.dot(self.weights2) + self.biases2
-        # self.a2 = np.maximum(0,self.z2)
-        self.scores = self.a1
-        print("scores= " , self.scores, " scores shape= ", np.shape(self.scores))
+        print("activation value= ",self.a1)
 
     def calc_error(self):
-        self.error = (self.targets - self.scores) **2
-        print("Error= ", self.error)
-        self.error = np.sum(np.sqrt(self.error))
+        self.error = (self.targets - self.a1) **2
+        self.error = np.mean(np.sqrt(self.error))
         print("Error= ", self.error)
 
     def back_prop(self,batch):
         # back propagation chain rule calculus
-        print("batchT= ", batch)
-        inputT = np.reshape(batch,[3,1])
-        print("batchT= ",inputT)
-        eXinput = np.dot(self.error,inputT)
-        deltaW = 2/(np.shape(batch)[0])*np.sum(eXinput)
-        print("deltaW= ",deltaW)
+        learning_rate = 0.001
+        gradientWeights = np.dot(batch.T,self.error)
+        gradientBias = np.sum(self.error, axis=0, keepdims=True)
+        self.weights1 = self.weights1 - learning_rate * gradientWeights
+        self.biases1 = self.biases1  - learning_rate * gradientBias
+
+
 
 
 
@@ -86,10 +79,12 @@ if __name__ == '__main__':
 
     mynn = NN(input_set,labels)
 
-    for batch in input_set:
-        mynn.feedforward(batch)
-        mynn.calc_error()
-        mynn.back_prop(batch)
+
+    for i in range(1):
+        for batch in input_set:
+            mynn.feedforward(batch)
+            mynn.calc_error()
+            mynn.back_prop(batch)
 
 
 
