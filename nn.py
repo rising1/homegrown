@@ -81,7 +81,7 @@ if __name__ == '__main__':
     mynn = NN(input_set,labels)
 
 
-    for i in range(1):
+    for i in range(11):
         for j in range(len(input_set)):
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
