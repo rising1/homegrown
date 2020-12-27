@@ -42,8 +42,9 @@ class NN:
         self.a1 = np.maximum(0,self.z1) # this is the activation function
         print("activation value= ",self.a1)
 
-    def calc_error(self):
-        self.error = (self.targets - self.a1) **2
+    def calc_error(self,target):
+        print("targets= ",target)
+        self.error = (target - self.a1) **2
         self.error = np.mean(np.sqrt(self.error))
         print("Error= ", self.error)
 
@@ -81,10 +82,10 @@ if __name__ == '__main__':
 
 
     for i in range(1):
-        for batch in input_set:
-            mynn.feedforward(batch)
-            mynn.calc_error()
-            mynn.back_prop(batch)
+        for j in range(len(input_set)):
+            mynn.feedforward(input_set[j])
+            mynn.calc_error(labels[j])
+            mynn.back_prop(input_set[j])
 
 
 
