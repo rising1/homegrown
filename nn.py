@@ -2,21 +2,19 @@ import numpy as np
 
 class NN:
 
-    def __init__(self,input_set,targets):
+    def __init__(self):
 
         self.weights1 = np.random.rand(3, 1)
-        print("self.weights1= ", self.weights1)
+        print("\n self.weights1= ", self.weights1)
         self.biases1 = np.random.rand(1,)
-        print("self.biases1= ",self.biases1)
+        print("\n self.biases1= ",self.biases1,"\n")
 
 
     def feedforward(self, batch):
+
         # multiply by weights and add bias
         self.batch = np.reshape(batch,[1,3])
         self.z1 = self.batch.dot(self.weights1) + self.biases1
-        self.dz1 = np.zeros_like(self.z1)
-        self.dz1[self.z1 <= 0] = 0
-        self.dz1[self.z1 > 0] = 1
         self.a1 = np.maximum(0,self.z1) # this is the activation function # **** This is working as expected
         return self.a1
 
@@ -29,7 +27,10 @@ class NN:
 
     def back_prop(self,batch):
         # back propagation chain rule calculus
-        learning_rate = 0.001
+        learning_rate = 0.01
+        self.dz1 = np.zeros_like(self.z1)
+        self.dz1[self.z1 <= 0] = 0
+        self.dz1[self.z1 > 0] = 1
         self.batchT = np.reshape(batch,[3,1])
         self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.error * self.dz1)
         self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
@@ -58,16 +59,15 @@ if __name__ == '__main__':
                        [1],
                        [0]])
 
-    mynn = NN(input_set,labels)
+    mynn = NN()
 
-
-    for i in range(1000):
+    for i in range(100):
         for j in range(len(input_set)):
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
             mynn.back_prop(input_set[j])
             #if (i == 1):
-            if (i % 100 == 0):
+            if (i % 10 == 0):
                 # print("Input batch shape= ", np.shape(mynn.batch))
                 # print("batch= ",mynn.batch)
                 # print("feed forward value= ",mynn.z1)
