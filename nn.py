@@ -65,7 +65,8 @@ class NN:
         # back propagation chain rule calculus
         learning_rate = 0.0001
         self.batchT = np.reshape(batch,[3,1])
-        self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.meanSquaredError * self.dz1)
+        # self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.meanSquaredError * self.dz1) # seemed to work
+        self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.error * self.dz1)
         self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
         self.weights1Adj  = - learning_rate * self.gradientWeights
         self.biases1Adj = - learning_rate * self.gradientBias
@@ -78,40 +79,40 @@ class NN:
 
 if __name__ == '__main__':
 
-    input_set = np.array([[0, 1, 0]])
+    # input_set = np.array([[0, 0, 1]])
 
-    labels = np.array([[1]])
+    # labels = np.array([[0]])
 
-    #input_set = np.array([[0, 1, 0],
-    #                      [0, 0, 1],
-    #                      [1, 0, 0],
-    #                      [1, 1, 0],
-    #                      [1, 1, 1],
-    #                      [0, 1, 1],
-    #                      [0, 1, 0]])  # Dependent variable
+    input_set = np.array([[0, 1, 0],
+                          [0, 0, 1],
+                          [1, 0, 0],
+                          [1, 1, 0],
+                          [1, 1, 1],
+                          [0, 1, 1],
+                          [0, 0, 0]])  # Dependent variable
 
-    #labels = np.array([[1],
-    #                   [0],
-    #                   [0],
-    #                   [1],
-    #                   [1],
-    #                   [0],
-    #                   [1]])
+    labels = np.array([[1],
+                       [0],
+                       [0],
+                       [1],
+                       [1],
+                       [1],
+                       [0]])
 
     mynn = NN(input_set,labels)
 
 
-    for i in range(20000):
+    for i in range(50000):
         for j in range(len(input_set)):
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
             mynn.back_prop(input_set[j])
             #if (i == 1):
-            if (i % 100 == 0):
+            if (i % 1000 == 0):
                 # print("Input batch shape= ", np.shape(mynn.batch))
                 # print("batch= ",mynn.batch)
                 # print("feed forward value= ",mynn.z1)
-                print("error= ",mynn.error)
+                print("error= ",mynn.meanSquaredError)
                 # print("error shape= ",np.shape(mynn.error))
                 # print("Input batch transposed shape= ",np.shape(mynn.batch))
                 # print("transposed batch= ", mynn.batchT)
@@ -126,5 +127,5 @@ if __name__ == '__main__':
     print("final weights= ",mynn.weights1)
     print("final bias= ",mynn.biases1)
     print("final error= ",mynn.meanSquaredError)
-
+    print("test should be 0 = ",mynn.feedforward([[1,0,1]]))
 
