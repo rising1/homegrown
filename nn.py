@@ -41,7 +41,9 @@ class NN:
     def feedforward(self, batch):
         # multiply by weights and add bias
         self.batch = np.reshape(batch,[1,3])
-        self.z1 = self.weights1.dot(self.batch) + self.biases1
+        # print("batch shape= ",np.shape(self.batch))
+        # print("weights shape= ",np.shape(self.weights1))
+        self.z1 = self.batch.dot(self.weights1) + self.biases1
         self.dz1 = np.zeros_like(self.z1)
         self.dz1[self.z1 <= 0] = 0
         self.dz1[self.z1 > 0] = 1
@@ -63,10 +65,10 @@ class NN:
         # back propagation chain rule calculus
         learning_rate = 0.0001
         self.batchT = np.reshape(batch,[3,1])
-        self.gradientWeights = 2/self.batchT.shape[1] * np.dot(self.meanSquaredError * self.dz1, self.batchT)
+        self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.meanSquaredError * self.dz1)
         self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
-        self.weights1Adj  =  learning_rate * self.gradientWeights
-        self.biases1Adj =  learning_rate * self.gradientBias
+        self.weights1Adj  = - learning_rate * self.gradientWeights
+        self.biases1Adj = - learning_rate * self.gradientBias
         self.weights1 = self.weights1 + self.weights1Adj
         self.biases1 = self.biases1 + self.biases1Adj
 
@@ -99,7 +101,7 @@ if __name__ == '__main__':
     mynn = NN(input_set,labels)
 
 
-    for i in range(1000):
+    for i in range(20000):
         for j in range(len(input_set)):
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
@@ -108,8 +110,8 @@ if __name__ == '__main__':
             if (i % 100 == 0):
                 # print("Input batch shape= ", np.shape(mynn.batch))
                 # print("batch= ",mynn.batch)
-                print("feed forward value= ",mynn.z1)
-                # print("error= ",mynn.error)
+                # print("feed forward value= ",mynn.z1)
+                print("error= ",mynn.error)
                 # print("error shape= ",np.shape(mynn.error))
                 # print("Input batch transposed shape= ",np.shape(mynn.batch))
                 # print("transposed batch= ", mynn.batchT)
@@ -123,6 +125,6 @@ if __name__ == '__main__':
 
     print("final weights= ",mynn.weights1)
     print("final bias= ",mynn.biases1)
-    print("final error= ",mynn.error)
+    print("final error= ",mynn.meanSquaredError)
 
 
