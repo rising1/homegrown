@@ -49,6 +49,7 @@ class NN:
         self.dz1[self.z1 > 0] = 1
         # print(self.dz1)
         self.a1 = np.maximum(0,self.z1) # this is the activation function # **** This is working as expected
+        return self.a1
 
 
     def calc_error(self,target):
@@ -88,7 +89,6 @@ if __name__ == '__main__':
                           [1, 0, 0],
                           [1, 1, 0],
                           [1, 1, 1],
-                          [0, 1, 1],
                           [0, 0, 0]])  # Dependent variable
 
     labels = np.array([[1],
@@ -96,13 +96,12 @@ if __name__ == '__main__':
                        [0],
                        [1],
                        [1],
-                       [1],
                        [0]])
 
     mynn = NN(input_set,labels)
 
 
-    for i in range(50000):
+    for i in range(10000):
         for j in range(len(input_set)):
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
@@ -124,8 +123,8 @@ if __name__ == '__main__':
                 # print("weightsAdj= ",mynn.weights1Adj)
 
 
-    print("final weights= ",mynn.weights1)
-    print("final bias= ",mynn.biases1)
-    print("final error= ",mynn.meanSquaredError)
-    print("test should be 0 = ",mynn.feedforward([[1,0,1]]))
-
+    print("final weights= ", mynn.weights1)
+    print("final bias= ", mynn.biases1)
+    print("final error= ", mynn.meanSquaredError)
+    print("test should be 0 = ", mynn.feedforward([[1, 0, 1]]))
+    print("test should be 1 = ", mynn.feedforward([[0, 1, 1]]))
