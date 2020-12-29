@@ -2,65 +2,44 @@ import numpy as np
 
 class NN:
 
-    def __init__(self,input_set,targets):
+    def __init__(self):
 
-        print(np.shape(input_set))
-        print(np.shape(targets))
-
-        # Input layer is 3 points
-        input_size = 3  # np.shape(input_set)[1]
-
-        # We will build a hidden 2nd layer of 4 points
-        # hidden_size = 4
-
-        # Output layer is 1 point
-        output_size = 1 # np.shape(labels)[1]
-
-        # we are going to pass 7 sets of values through the network
-        # We will connect each point in one layer to every point in the next layer
-        # So each point in the first layer connects to 4 points in the second layer
-        # Each point in the second layer connects to 1 point in the output layer
-        # Every connection will hold inside it a multiplier value which is called a weight
-        # Every layer (but not the input layer) will have a value to add called a bias
-
-        # Now to set up the neural network multipliers (weights) and constants (biases)
-
-        self.input_set = input_set
-        self.weights1 = np.random.rand(3,1)
-        print("weights= ",self.weights1)
+        self.weights1 = np.random.rand(3, 1)
+        print("\n self.weights1= ", self.weights1)
         self.biases1 = np.random.rand(1,)
-        print("bias= ",self.biases1)
-        # self.weights2 = np.random.rand(4,1)
-        # self.biases2 = np.random.rand(1,)
-        self.targets = targets
-
-        # Now multiply the input values by the weights and apply a signal strength test to each
-        # this is called an activation. if it passes activation, the result is stored in the point
-        # of the next layer. We will call the function feedforward to do this.
-
+        print("\n self.biases1= ",self.biases1,"\n")
 
 
     def feedforward(self, batch):
-        # multiply by weights and add bias
-        self.z1 = batch.dot(self.weights1) + self.biases1
-        self.a1 = np.maximum(0,self.z1) # this is the activation function
-        # self.z2 = self.a1.dot(self.weights2) + self.biases2
-        # self.a2 = np.maximum(0,self.z2)
-        self.scores = self.a1
-        print("scores= " , self.scores, " scores shape= ", np.shape(self.scores))
 
-    def calc_error(self):
-        self.error = (self.targets - self.scores) **2
-        self.error = np.sum(np.sqrt(self.error))
-        print("Error= ", self.error)
+        # multiply by weights and add bias
+        self.batch = np.reshape(batch,[1,3])
+        self.z1 = self.batch.dot(self.weights1) + self.biases1
+        self.a1 = np.maximum(0,self.z1) # this is the activation function # **** This is working as expected
+        return self.a1
+
+
+    def calc_error(self,target):
+        self.error = (self.a1 - target)
+        self.meanSquaredError = np.mean(self.error**2)
+
+
 
     def back_prop(self,batch):
         # back propagation chain rule calculus
-        inputT = np.transpose(batch)
-        print("batchT= ",inputT)
-        #eXinput = np.dot(self.error,inputT)
-        #deltaW = 2/(np.shape(batch)[1])*np.sum(eXinput)
-        #print("deltaW= ",deltaW)
+        learning_rate = 0.01
+        self.dz1 = np.zeros_like(self.z1)
+        self.dz1[self.z1 <= 0] = 0
+        self.dz1[self.z1 > 0] = 1
+        self.batchT = np.reshape(batch,[3,1])
+        self.gradientWeights = 2/self.batchT.shape[1] * np.dot( self.batchT,self.error * self.dz1)
+        self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
+        self.weights1Adj  = - learning_rate * self.gradientWeights
+        self.biases1Adj = - learning_rate * self.gradientBias
+        self.weights1 = self.weights1 + self.weights1Adj
+        self.biases1 = self.biases1 + self.biases1Adj
+
+
 
 
 
@@ -71,24 +50,42 @@ if __name__ == '__main__':
                           [1, 0, 0],
                           [1, 1, 0],
                           [1, 1, 1],
-                          [0, 1, 1],
-                          [0, 1, 0]])  # Dependent variable
+                          [0, 0, 0]])  # Dependent variable
 
     labels = np.array([[1],
                        [0],
                        [0],
                        [1],
                        [1],
-                       [0],
-                       [1]])
+                       [0]])
 
-    mynn = NN(input_set,labels)
+    mynn = NN()
 
-    for batch in input_set:
-        mynn.feedforward(batch)
-        mynn.calc_error()
-        mynn.back_prop(batch)
+    for i in range(100):
+        for j in range(len(input_set)):
+            mynn.feedforward(input_set[j])
+            mynn.calc_error(labels[j])
+            mynn.back_prop(input_set[j])
+            #if (i == 1):
+            if (i % 10 == 0):
+                # print("Input batch shape= ", np.shape(mynn.batch))
+                # print("batch= ",mynn.batch)
+                # print("feed forward value= ",mynn.z1)
+                print("error= ",mynn.meanSquaredError)
+                # print("error shape= ",np.shape(mynn.error))
+                # print("Input batch transposed shape= ",np.shape(mynn.batch))
+                # print("transposed batch= ", mynn.batchT)
+                # print ("gradient weights shape = ",np.shape(mynn.gradientWeights))
+                # print("Gradient weights=",mynn.gradientWeights)
+                # print("activation= ",mynn.a1)
+                # print("weights1= ",mynn.weights1)
+                # print("Weights shape= ",np.shape(mynn.weights1))
+                # print("weightsAdj= ",mynn.weights1Adj)
 
 
-
-
+    # print("final weights= ", mynn.weights1)
+    # print("final bias= ", mynn.biases1)
+    # print("final error= ", mynn.meanSquaredError)
+    print("\n")
+    print("test [1, 0, 1] should be 0 = ", mynn.feedforward([[1, 0, 1]]))
+    print("test [0, 1, 1] should be 1 = ", mynn.feedforward([[0, 1, 1]]))
