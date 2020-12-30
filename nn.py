@@ -18,7 +18,7 @@ class NN:
         self.z1 = self.dotOperation("add_elements",self.sumInputWeights,self.biases1)
         # self.z1 = np.dot(self.batch,self.weights1) + self.biases1
         print("z1= ",self.z1)
-        self.a1 = np.maximum(0,self.z1) # this is the activation function
+        self.a1 = max(0,self.z1) # this is the activation function
         return self.a1
 
     def calc_error(self,target):
@@ -54,24 +54,26 @@ class NN:
         b = len(matrix1[0])
         c = len(matrix2)
         d = len(matrix2[0])
-        if(a != c or b != d):
-            print("\n","matrices should be same shape")
-            print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
+        #if(a != c or b != d):
+        #    print("\n","matrices should be same shape")
+        #    print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
         result = [[0 for col in range(d)] for row in range(c)]
-        print("matrix1= ",matrix1)
-        print("matrix2= ",matrix2)
-        print("result= ",result)
+        #print("matrix1= ",matrix1)
+        #print("matrix2= ",matrix2)
+        #print("result= ",result)
         # print("a= ",a)
         if(c>0):
             for i in range(d):
                 for j in range(c):
-                    print("i=",i," j=",j)
+                    # print("i=",i," j=",j)
                     # print("multiplying ", matrix1[j][i], matrix2[i][j])
                     if operation == "multiply_elements":
                         result[j][i] = matrix1[i][j] * matrix2[j][i]
                     if operation == "add_elements":
-                        print("in add_elements")
+                        # print("in add_elements")
                         result[j][i] = matrix1[i][j] + matrix2[j][i]
+        #if operation == "add_elements":
+        #    print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
         return result
 
     def addVector(self,vector):
@@ -110,7 +112,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 200
+    number_of_iterations = 1
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
