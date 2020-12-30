@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 2
+    number_of_iterations = 200
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
