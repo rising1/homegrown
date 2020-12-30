@@ -29,7 +29,7 @@ class NN:
         # back propagation chain rule calculus
         # self.dz1 = np.zeros_like(self.z1)
         self.dz1 = self.z1
-        self.printMatrixShape(self.z1)
+        # self.printMatrixShape(self.z1)
         for i in range(len(self.z1)):
             for j in range(len(self.z1[0])):
                 self.dz1[i][j] = 0
@@ -54,21 +54,24 @@ class NN:
         b = len(matrix1[0])
         c = len(matrix2)
         d = len(matrix2[0])
-        # if(a != c or b != d):
-            # print("\n","error - matrices should be same shape")
-            # print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
-        result = [[None for col in range(a)] for row in range(b)]
-        # print(result)
+        if(a != c or b != d):
+            print("\n","matrices should be same shape")
+            print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
+        result = [[0 for col in range(d)] for row in range(c)]
+        print("matrix1= ",matrix1)
+        print("matrix2= ",matrix2)
+        print("result= ",result)
         # print("a= ",a)
         if(c>0):
-            for i in range(c):
-                # for j in range(d):
-                    # print("j=",j," i=",i)
+            for i in range(d):
+                for j in range(c):
+                    print("i=",i," j=",j)
                     # print("multiplying ", matrix1[j][i], matrix2[i][j])
-                if operation == "multiply_elements":
-                    result[i][j] = matrix1[j][i] * matrix2[i][j]
-                if operation == "add_elements":
-                    result[i][j] = matrix1[j][i] + matrix2[i][j]
+                    if operation == "multiply_elements":
+                        result[j][i] = matrix1[i][j] * matrix2[j][i]
+                    if operation == "add_elements":
+                        print("in add_elements")
+                        result[j][i] = matrix1[i][j] + matrix2[j][i]
         return result
 
     def addVector(self,vector):
@@ -107,7 +110,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 1
+    number_of_iterations = 2
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
@@ -124,7 +127,7 @@ if __name__ == '__main__':
     print("final bias= ", mynn.biases1,"\n")
 
     # print("final error= ", mynn.meanSquaredError)
-    print("test [1, 0, 1] should be 0 = ", mynn.feedforward([[1, 0, 1]]))
-    print("test [0, 1, 1] should be 1 = ", mynn.feedforward([[0, 1, 1]]))
+    print("test [1, 0, 1] should be 0 = ", mynn.feedforward([1, 0, 1]))
+    print("test [0, 1, 1] should be 1 = ", mynn.feedforward([0, 1, 1]))
 
     # mynn.dotOperation("multiply_elements",input_set,labels)
