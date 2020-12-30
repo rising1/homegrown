@@ -5,18 +5,19 @@ class NN:
     def __init__(self):
 
         self.weights1 = [[0.5],[0.5],[0.5]]  #  np.random.rand(3, 1)
-        print("\n self.weights1= ", self.weights1)
+        # print("\n self.weights1= ", self.weights1)
         self.biases1 = [[0.5]]  #   np.random.rand(1,)
-        print("\n self.biases1= ",self.biases1,"\n")
-
+        # print("\n self.biases1= ",self.biases1,"\n")
 
     def feedforward(self, batch):
         # multiply by weights and add bias
         self.batch = [batch] #    np.reshape(batch,[1,3])
-        # self.z1 = self.dotOperation("multiply_elements",self.batch, self.weights1) + self.biases1
-        self.z1 = np.dot(self.batch,self.weights1) + self.biases1
-        # self.z1 = self.batch.dot(self.weights1) + self.biases1
-        # print("z1= ",self.z1)
+        self.inputWeights = self.dotOperation("multiply_elements",self.batch, self.weights1)
+        # print("self.inputWeights= ",self.inputWeights)
+        self.sumInputWeights = self.addVector(self.inputWeights)
+        self.z1 = self.dotOperation("add_elements",self.sumInputWeights,self.biases1)
+        # self.z1 = np.dot(self.batch,self.weights1) + self.biases1
+        print("z1= ",self.z1)
         self.a1 = np.maximum(0,self.z1) # this is the activation function
         return self.a1
 
@@ -26,14 +27,15 @@ class NN:
 
     def back_prop(self,batch,learning_rate):
         # back propagation chain rule calculus
-        self.dz1 = np.zeros_like(self.z1)
-        # self.dz1 = self.z1
-        # if(self.z1[0][0] > 0):
-        #    self.dz1[0][0] = 1
-        #else:
-        #    self.dz1[0][0] = 0
-        self.dz1[self.z1 <= 0] = 0
-        self.dz1[self.z1 > 0] = 1
+        # self.dz1 = np.zeros_like(self.z1)
+        self.dz1 = self.z1
+        self.printMatrixShape(self.z1)
+        for i in range(len(self.z1)):
+            for j in range(len(self.z1[0])):
+                self.dz1[i][j] = 0
+        print("dz1= ",self.dz1)
+        # self.dz1[self.z1 <= 0] = 0
+        # self.dz1[self.z1 > 0] = 1
         self.batchT = np.reshape(batch,[3,1])
         # self.gradientWeights = 2/self.batchT.shape[1] * self.dotOperation("add_elements", self.batchT,self.error * self.dz1)
         self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
@@ -43,39 +45,47 @@ class NN:
         self.weights1 = self.weights1 + self.weights1Adj
         self.biases1 = self.biases1 + self.biases1Adj
 
-    # Utility function for matrix operations
+    #*********************************************************************
+    #*********************Utility function for matrix operations**********
+    #*********************************************************************
+
     def dotOperation(self,operation,matrix1,matrix2):
         a = len(matrix1)
         b = len(matrix1[0])
         c = len(matrix2)
         d = len(matrix2[0])
-
-        #print("\ncode for dot matrix multiplication")
-        #print("matrix1 shape= (",len(matrix1),len(matrix1[0]),")")
-        #print("matrix2 shape= (",len(matrix2),len(matrix2[0]),")")
-        if(a != c or b != d):
-            print("\n","error - matrices should be same shape")
-            print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
+        # if(a != c or b != d):
+            # print("\n","error - matrices should be same shape")
+            # print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
         result = [[None for col in range(a)] for row in range(b)]
-        print(result)
-        print("a= ",a)
+        # print(result)
+        # print("a= ",a)
         if(c>0):
             for i in range(c):
-                for j in range(d):
-                    print("j=",j," i=",i)
-                    print("multiplying ", matrix1[j][i], matrix2[i][j])
+                # for j in range(d):
+                    # print("j=",j," i=",i)
+                    # print("multiplying ", matrix1[j][i], matrix2[i][j])
                 if operation == "multiply_elements":
                     result[i][j] = matrix1[j][i] * matrix2[i][j]
                 if operation == "add_elements":
                     result[i][j] = matrix1[j][i] + matrix2[i][j]
+        return result
+
+    def addVector(self,vector):
         sum = 0.0
-        for res in result:
-            sum = sum + res[0]
-        print("sum= ", [[sum]])
-        return [[sum]]
+        for v in vector[0]:
+            # print("Vector v= ",v)
+            sum += v
+        # print("Vector sum= ",sum)
+        return[[sum]]
+
+    def printMatrixShape(self,matrix1):
+        print("matrix1 shape= (",len(matrix1),len(matrix1[0]),")")
 
 
-
+    # **************************************************************
+    # *************** End of utility functions *********************
+    # **************************************************************
 
 if __name__ == '__main__':
 
@@ -97,7 +107,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 100
+    number_of_iterations = 1
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
