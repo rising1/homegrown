@@ -18,11 +18,11 @@ class NN:
         self.z1 = self.dotOperation("add_elements",self.sumInputWeights,self.biases1)
         # self.z1 = np.dot(self.batch,self.weights1) + self.biases1
         print("z1= ",self.z1)
-        self.a1 = max(0,self.z1) # this is the activation function
+        self.a1 = max(0,self.z1[0][0]) # this is the activation function
         return self.a1
 
     def calc_error(self,target):
-        self.error = (self.a1 - target)
+        self.error = (self.a1 - target[0])
         self.meanSquaredError = np.mean(self.error**2)
 
     def back_prop(self,batch,learning_rate):
@@ -72,8 +72,8 @@ class NN:
                     if operation == "add_elements":
                         # print("in add_elements")
                         result[j][i] = matrix1[i][j] + matrix2[j][i]
-        #if operation == "add_elements":
-        #    print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+        if operation == "add_elements":
+            print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
         return result
 
     def addVector(self,vector):
