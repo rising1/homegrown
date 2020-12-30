@@ -17,12 +17,13 @@ class NN:
         self.sumInputWeights = self.addVector(self.inputWeights)
         self.z1 = self.dotOperation("add_elements",self.sumInputWeights,self.biases1)
         # self.z1 = np.dot(self.batch,self.weights1) + self.biases1
-        print("z1= ",self.z1)
+        print(" feed forward z1= ",self.z1)
         self.a1 = max(0,self.z1[0][0]) # this is the activation function
         return self.a1
 
     def calc_error(self,target):
         self.error = (self.a1 - target[0])
+        print("self.error= ",self.error)
         self.meanSquaredError = np.mean(self.error**2)
 
     def back_prop(self,batch,learning_rate):
@@ -33,12 +34,19 @@ class NN:
         for i in range(len(self.z1)):
             for j in range(len(self.z1[0])):
                 self.dz1[i][j] = 0
-        print("dz1= ",self.dz1)
+        # print("dz1= ",self.dz1)
         # self.dz1[self.z1 <= 0] = 0
         # self.dz1[self.z1 > 0] = 1
         self.batchT = np.reshape(batch,[3,1])
-        # self.gradientWeights = 2/self.batchT.shape[1] * self.dotOperation("add_elements", self.batchT,self.error * self.dz1)
-        self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
+        # print("error= ",self.error,"dz1= ",self.dz1)
+        self.errorIncrement = [[self.error * self.dz1[0][0]]]
+        # print("errorIncrement= ",self.errorIncrement)
+        self.partgradWeights = self.dotOperation(
+                        "multiply_elements", self.batchT, self.errorIncrement)
+        # print("partgradWeights= ",self.partgradWeights)
+        self.gradientWeights = 2/self.batchT.shape[1] * self.partgradWeights[0][0]
+        # print("gradient weights= ",self.gradientWeights)
+        # self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
         self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
         self.weights1Adj  = - learning_rate * self.gradientWeights
         self.biases1Adj = - learning_rate * self.gradientBias
@@ -72,8 +80,8 @@ class NN:
                     if operation == "add_elements":
                         # print("in add_elements")
                         result[j][i] = matrix1[i][j] + matrix2[j][i]
-        if operation == "add_elements":
-            print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+        # if operation == "add_elements":
+        # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
         return result
 
     def addVector(self,vector):
@@ -112,7 +120,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 1
+    number_of_iterations = 10
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
