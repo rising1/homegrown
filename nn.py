@@ -39,7 +39,7 @@ class NN:
                     self.dz1[i][j] = 1
                 else:
                     self.dz1[i][j] = 0
-        # print("dz1= ",self.dz1)
+        print("dz1= ",self.dz1)
         # self.dz1[self.z1 <= 0] = 0
         # self.dz1[self.z1 > 0] = 1
         self.batchT = np.reshape(batch,[3,1])
@@ -49,9 +49,9 @@ class NN:
         print("errorIncrement= ",self.errorIncrement)
         self.partgradWeights = self.dotOperation(
                         "multiply_elements", self.batchT, self.errorIncrement)
-        print("partgradWeights= ",self.partgradWeights)
+        # print("partgradWeights= ",self.partgradWeights)
         self.gradientWeights = 2/self.batchT.shape[1] * self.partgradWeights[0][0]
-        print("gradient weights= ",self.gradientWeights)
+        # print("gradient weights= ",self.gradientWeights)
         # self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
         self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
         self.weights1Adj  = - learning_rate * self.gradientWeights
@@ -64,31 +64,35 @@ class NN:
     #*********************************************************************
 
     def dotOperation(self,operation,matrix1,matrix2):
-        matrix1 = self.reshape(matrix1)
+
         a = len(matrix1)
         b = len(matrix1[0])
         c = len(matrix2)
         d = len(matrix2[0])
-        #if(a != c or b != d):
-        #    print("\n","matrices should be same shape")
-        #    print(" matrix 1= (",a,b,") matrix 2= (",c,d,")")
-        result = [[0 for col in range(d)] for row in range(c)]
-        print("matrix1= ",matrix1)
-        print("matrix2= ",matrix2)
-        # print("a= ",a)
-        if(c>0):
-            for i in range(c):
-                for j in range(d):
-                    # print("i=",i," j=",j)
-                    # print("multiplying ", matrix1[j][i], matrix2[i][j])
-                    if operation == "multiply_elements":
-                        result[i][j] = matrix1[i][j] * matrix2[i][j]
-                    if operation == "add_elements":
-                        # print("in add_elements")
-                        result[i][j] = matrix1[i][j] + matrix2[i][j]
-        # if operation == "add_elements":
-        # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
-        print("result= ",result)
+        if(a == d and b == c):
+            matrix1 = self.reshape(matrix1)
+            result = [[0 for col in range(d)] for row in range(c)]
+            # print("matrix1= ",matrix1)
+            # print("matrix2= ",matrix2)
+            # print("a= ",a)
+            if(c>0):
+                for i in range(c):
+                    for j in range(d):
+                        # print("i=",i," j=",j)
+                        # print("multiplying ", matrix1[j][i], matrix2[i][j])
+                        if operation == "multiply_elements":
+                            result[i][j] = matrix1[i][j] * matrix2[i][j]
+                        if operation == "add_elements":
+                            # print("in add_elements")
+                            result[i][j] = matrix1[i][j] + matrix2[i][j]
+            # if operation == "add_elements":
+            # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+            # print("result= ",result)
+
+        if( a > c and b == c ):
+            print("put code for multiplying unequal matrix size elements here")
+            result = [[1]]
+
         return result
 
     def addVector(self,vector):
