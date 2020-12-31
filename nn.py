@@ -90,8 +90,13 @@ class NN:
             # print("result= ",result)
 
         if( a > c and b == c ):
-            print("put code for multiplying unequal matrix size elements here")
-            result = [[1]]
+            result = [[0 for col in range(b)] for row in range(a)]
+            print("empty result= ",result)
+            print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+            for i in range(a):
+                for j in range(b):
+                    if operation == "multiply_elements":
+                        result[i][j] = matrix1[i][j] * matrix2[j][j]
 
         return result
 
