@@ -2,33 +2,33 @@ class NN:
 
     def __init__(self):
 
-        self.weights1 = [[0.5],[0.5],[0.5]]  #  np.random.rand(3, 1)
-        # print("\n self.weights1= ", self.weights1)
-        self.biases1 = [[0.5]]  #   np.random.rand(1,)
-        # print("\n self.biases1= ",self.biases1,"\n")
+        self.weights1 = [[0.5],[0.5],[0.5]]
+        self.biases1 = [[0.5]]
 
     def feedforward(self, batch):
-        # multiply by weights and add bias
-        self.batch = [batch] #    np.reshape(batch,[1,3])
+
+        # multiply a batch of inputs by weights and add bias. Then apply activation rule
+
+        # put the batch into the right vector format
+        self.batch = [batch] # changes [0,0,1] to [[0,0,1]] - a (1,3) shape vector
+        # multiply the inputs by the weightings
         self.inputWeights = self.dotOperation("multiply_elements",self.batch, self.weights1)
-        # print("self.inputWeights= ",self.inputWeights)
-        # print("input weights=", self.inputWeights)
+        # add the contents of the above vector together - makes a (1,1) vector
         self.sumInputWeights = self.addVector(self.inputWeights)
-        # print("sumInputWeights=",self.sumInputWeights,"  Bias=",self.biases1)
+        # add the result of the above inputs/weights sum above to the bias vector
         self.z1 = self.dotOperation("add_elements",self.sumInputWeights,self.biases1)
-        # self.z1 = np.dot(self.batch,self.weights1) + self.biases1
-        # print(" feed forward z1= ",self.z1)
-        self.a1 = max(0,self.z1[0][0]) # this is the activation function
+        # now put the result through the 'ReLu' activation function
+        self.a1 = max(0,self.z1[0][0])
         return self.a1
 
     def calc_error(self,target):
+        # calculate the difference between the value of the activation above
+        # and the correct target result
         self.error = (self.a1 - target[0])
-        print("self.error= ",self.error)
+        # calculate the mean squared error (only one value so the mean is the same)
         self.meanSquaredError = (self.error**2)
 
     def back_prop(self,batch,learning_rate):
-        # back propagation chain rule calculus
-        # self.dz1 = np.zeros_like(self.z1)
         self.dz1 = self.z1
         # self.printMatrixShape(self.z1)
         for i in range(len(self.z1)):
