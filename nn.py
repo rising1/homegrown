@@ -46,15 +46,18 @@ class NN:
         # print("batchT=",self.batchT)
         # print("error= ",self.error,"dz1= ",self.dz1)
         self.errorIncrement = [[self.error * self.dz1[0][0]]]
-        print("errorIncrement= ",self.errorIncrement)
+        # print("errorIncrement= ",self.errorIncrement)
         self.partgradWeights = self.dotOperation(
                         "multiply_elements", self.batchT, self.errorIncrement)
-        # print("partgradWeights= ",self.partgradWeights)
-        self.gradientWeights = 2/self.batchT.shape[1] * self.partgradWeights[0][0]
+        # self.partgradWeights = self.addVector(self.partgradWeights)
+        # print("partgradWeights= ", self.partgradWeights)
+        self.gradientWeights = self.multiplyVector(2/self.batchT.shape[1], self.partgradWeights )
         # print("gradient weights= ",self.gradientWeights)
         # self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
-        self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
-        self.weights1Adj  = - learning_rate * self.gradientWeights
+        print("self.error= ", self.error)
+        self.gradientBias = self.error
+        # self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
+        self.weights1Adj  = self.multiplyVector(- learning_rate , self.gradientWeights)
         self.biases1Adj = - learning_rate * self.gradientBias
         self.weights1 = self.weights1 + self.weights1Adj
         self.biases1 = self.biases1 + self.biases1Adj
@@ -91,13 +94,12 @@ class NN:
 
         if( a > c and b == c ):
             result = [[0 for col in range(b)] for row in range(a)]
-            print("empty result= ",result)
-            print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+            # print("empty result= ",result)
             for i in range(a):
                 for j in range(b):
                     if operation == "multiply_elements":
                         result[i][j] = matrix1[i][j] * matrix2[j][j]
-
+            # print("matrix1= ", matrix1, " matrix2= ", matrix2, " result= ", result)
         return result
 
     def addVector(self,vector):
@@ -109,6 +111,12 @@ class NN:
                 sum += v
                 # print("Vector sum= ",sum)
         return[[sum]]
+
+    def multiplyVector(self,scalar, vector):
+        for v in vector:
+            v[0] = v[0] * scalar
+        print("vector= ",vector," scalar= ",scalar,"multiplyVector result= ",vector)
+        return vector
 
     def reshape(self,matrix):
         a = len(matrix)
@@ -131,28 +139,28 @@ class NN:
 
 if __name__ == '__main__':
 
-    input_set = [[0, 0, 1]]
-    labels = [[0]]
+    #input_set = [[0, 0, 1]]
+    #labels = [[0]]
 
-    #input_set = [[0, 1, 0],
-    #             [0, 0, 1],
-    #             [1, 0, 0],
-    #             [1, 1, 0],
-    #             [1, 1, 1],
-    #             [0, 0, 0]]  # Dependent variable
+    input_set = [[0, 1, 0],
+                 [0, 0, 1],
+                 [1, 0, 0],
+                 [1, 1, 0],
+                 [1, 1, 1],
+                 [0, 0, 0]]  # Dependent variable
 
-    #labels = [[1],
-    #          [0],
-    #          [0],
-    #          [1],
-    #          [1],
-    #          [0]]
+    labels = [[1],
+              [0],
+              [0],
+              [1],
+              [1],
+              [0]]
 
     mynn = NN()
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 1
+    number_of_iterations = 200
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
