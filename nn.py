@@ -58,36 +58,36 @@ class NN:
         self.gradientBias = self.error
         # self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
         self.weights1Adj  = self.multiplyVector(- learning_rate , self.gradientWeights)
+        # print("weightsAdj= ",self.weights1Adj)
         self.biases1Adj = - learning_rate * self.gradientBias
-        self.weights1 = self.weights1 + self.weights1Adj
-        self.biases1 = self.biases1 + self.biases1Adj
+        print("weights1= ",self.weights1," weightsAdj= ",self.weights1Adj)
+        self.weights1 = self.dotOperation("add_Elements",self.weights1, self.weights1Adj)
+        self.biases1[0][0] = self.biases1[0][0] + self.biases1Adj
 
     #*********************************************************************
     #*********************Utility function for matrix operations**********
     #*********************************************************************
 
     def dotOperation(self,operation,matrix1,matrix2):
-
+        print("matrix1= ",matrix1)
+        print("matrix2= ",matrix2)
         a = len(matrix1)
         b = len(matrix1[0])
         c = len(matrix2)
         d = len(matrix2[0])
         if(a == d and b == c):
             matrix1 = self.reshape(matrix1)
-            result = [[0 for col in range(d)] for row in range(c)]
-            # print("matrix1= ",matrix1)
-            # print("matrix2= ",matrix2)
-            # print("a= ",a)
-            if(c>0):
-                for i in range(c):
-                    for j in range(d):
-                        # print("i=",i," j=",j)
-                        # print("multiplying ", matrix1[j][i], matrix2[i][j])
-                        if operation == "multiply_elements":
-                            result[i][j] = matrix1[i][j] * matrix2[i][j]
-                        if operation == "add_elements":
-                            # print("in add_elements")
-                            result[i][j] = matrix1[i][j] + matrix2[i][j]
+        result = [[0 for col in range(d)] for row in range(c)]
+        # print("a= ",a)
+        for i in range(c):
+            for j in range(d):
+                # print("i=",i," j=",j)
+                # print("multiplying ", matrix1[j][i], matrix2[i][j])
+                if operation == "multiply_elements":
+                    result[i][j] = matrix1[i][j] * matrix2[i][j]
+                if operation == "add_elements":
+                    # print("in add_elements")
+                    result[i][j] = matrix1[i][j] + matrix2[i][j]
             # if operation == "add_elements":
             # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
             # print("result= ",result)
@@ -115,7 +115,7 @@ class NN:
     def multiplyVector(self,scalar, vector):
         for v in vector:
             v[0] = v[0] * scalar
-        print("vector= ",vector," scalar= ",scalar,"multiplyVector result= ",vector)
+        # print("vector= ",vector," scalar= ",scalar,"multiplyVector result= ",vector)
         return vector
 
     def reshape(self,matrix):
