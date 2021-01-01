@@ -1,5 +1,3 @@
-import numpy as np
-
 class NN:
 
     def __init__(self):
@@ -25,8 +23,8 @@ class NN:
 
     def calc_error(self,target):
         self.error = (self.a1 - target[0])
-        # print("self.error= ",self.error)
-        self.meanSquaredError = np.mean(self.error**2)
+        print("self.error= ",self.error)
+        self.meanSquaredError = (self.error**2)
 
     def back_prop(self,batch,learning_rate):
         # back propagation chain rule calculus
@@ -39,10 +37,10 @@ class NN:
                     self.dz1[i][j] = 1
                 else:
                     self.dz1[i][j] = 0
-        print("dz1= ",self.dz1)
+        # print("dz1= ",self.dz1)
         # self.dz1[self.z1 <= 0] = 0
         # self.dz1[self.z1 > 0] = 1
-        self.batchT = np.reshape(batch,[3,1])
+        self.batchT = self.reshape(batch)
         # print("batchT=",self.batchT)
         # print("error= ",self.error,"dz1= ",self.dz1)
         self.errorIncrement = [[self.error * self.dz1[0][0]]]
@@ -51,17 +49,17 @@ class NN:
                         "multiply_elements", self.batchT, self.errorIncrement)
         # self.partgradWeights = self.addVector(self.partgradWeights)
         # print("partgradWeights= ", self.partgradWeights)
-        self.gradientWeights = self.multiplyVector(2/self.batchT.shape[1], self.partgradWeights )
+        self.gradientWeights = self.multiplyVector(2/len(self.batchT[1]), self.partgradWeights )
         # print("gradient weights= ",self.gradientWeights)
         # self.gradientWeights = 2 / self.batchT.shape[1] * np.dot(self.batchT, self.error * self.dz1)
-        print("self.error= ", self.error)
+        # print("self.error= ", self.error)
         self.gradientBias = self.error
         # self.gradientBias = np.sum(self.error, axis=0, keepdims=True)
         self.weights1Adj  = self.multiplyVector(- learning_rate , self.gradientWeights)
         # print("weightsAdj= ",self.weights1Adj)
         self.biases1Adj = - learning_rate * self.gradientBias
-        print("weights1= ",self.weights1," weightsAdj= ",self.weights1Adj)
-        self.weights1 = self.dotOperation("add_Elements",self.weights1, self.weights1Adj)
+        # print("weights1= ",self.weights1," weightsAdj= ",self.weights1Adj)
+        self.weights1 = self.dotOperation("add_elements",self.weights1, self.weights1Adj)
         self.biases1[0][0] = self.biases1[0][0] + self.biases1Adj
 
     #*********************************************************************
@@ -69,8 +67,8 @@ class NN:
     #*********************************************************************
 
     def dotOperation(self,operation,matrix1,matrix2):
-        print("matrix1= ",matrix1)
-        print("matrix2= ",matrix2)
+        # print("matrix1= ",matrix1)
+        # print("matrix2= ",matrix2)
         a = len(matrix1)
         b = len(matrix1[0])
         c = len(matrix2)
@@ -88,9 +86,9 @@ class NN:
                 if operation == "add_elements":
                     # print("in add_elements")
                     result[i][j] = matrix1[i][j] + matrix2[i][j]
-            # if operation == "add_elements":
-            # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
-            # print("result= ",result)
+        # if operation == "add_elements":
+        # print("matrix1= ",matrix1," matrix2= ",matrix2," result= ",result)
+        # print("result= ",result)
 
         if( a > c and b == c ):
             result = [[0 for col in range(b)] for row in range(a)]
@@ -120,11 +118,18 @@ class NN:
 
     def reshape(self,matrix):
         a = len(matrix)
-        b = len(matrix[0])
-        newMatrix = [[0 for col in range(a)] for row in range(b)]
-        for i in range(a):
-            for j in range(b):
-                newMatrix[j][i] = matrix[i][j]
+        if(not isinstance(matrix[0],int) ):
+            # print("type of matrix is ",type(matrix[0]))
+            b = len(matrix[0])
+            newMatrix = [[0 for col in range(a)] for row in range(b)]
+            for i in range(a):
+                for j in range(b):
+                    newMatrix[j][i] = matrix[i][j]
+        else:
+            newMatrix = [[0] for col in range(a)]
+            # print("newMatrix is ",newMatrix)
+            for i in range(a):
+                newMatrix[i][0] = matrix[i]
         return newMatrix
 
 
@@ -139,8 +144,8 @@ class NN:
 
 if __name__ == '__main__':
 
-    #input_set = [[0, 0, 1]]
-    #labels = [[0]]
+    # input_set = [[0, 0, 1]]
+    # labels = [[0]]
 
     input_set = [[0, 1, 0],
                  [0, 0, 1],
