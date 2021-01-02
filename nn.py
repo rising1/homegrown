@@ -83,7 +83,7 @@ class NN:
     #*********************************************************************
 
     def dotOperation(self,operation,matrix1,matrix2):
-
+        # print("matrix1= ",matrix1, " matrix2= ", matrix2)
         a = len(matrix1)
         b = len(matrix1[0])
         c = len(matrix2)
@@ -115,8 +115,9 @@ class NN:
         return[[sum]]
 
     def multiplyVector(self, scalar, vector):
-        for v in vector:
-            v[0] = v[0] * scalar
+        if not isinstance(vector,int):
+            for v in vector:
+                v[0] = v[0] * scalar
         return vector
 
     def reshape(self, matrix):
@@ -164,7 +165,7 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01 # **** this is the learning rate factor
-    number_of_iterations = 200
+    number_of_iterations = 240
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
