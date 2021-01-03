@@ -32,7 +32,8 @@ class NN2:
         print("z1= ",self.z1)
 
         # now put the result through the 'ReLu' activation function
-        self.hidden = max(0, self.z1[0][0])
+        self.hidden = ut.Relu(self.z1)
+        print("hidden= ",self.hidden)
 
         return self.hidden
 

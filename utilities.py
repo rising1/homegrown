@@ -3,7 +3,7 @@
 # *********************************************************************
 
 def dotOperation( operation, matrix1, matrix2):
-    print("matrix1= ",matrix1, " matrix2= ", matrix2)
+    # print("matrix1= ",matrix1, " matrix2= ", matrix2)
     a = len(matrix1)
     b = len(matrix1[0])
     c = len(matrix2)
@@ -11,10 +11,10 @@ def dotOperation( operation, matrix1, matrix2):
     print("matrix1 shape= ",a,":",b," matrix2 shape= ",c,":",d)
     if operation == "multiply_elements":
         result = [[0 for col in range(d)] for row in range(a)]
-        print("result shape= ",len(result),":",len(result[0]))
+        # print("result shape= ",len(result),":",len(result[0]))
     if operation == "add_elements":
         result = [[0 for col in range(d)] for row in range(c)]
-        print("result shape= ",len(result),":",len(result[0]))
+        # print("result shape= ",len(result),":",len(result[0]))
     if operation == "multiply_elements":
         for i in range(c):
             for j in range(d):
@@ -22,12 +22,12 @@ def dotOperation( operation, matrix1, matrix2):
     if operation == "add_elements":
         if (a == d and b == c):
             matrix1 = reshape(matrix1)
-            print("reshaped matrix1= ",matrix1)
+            # print("reshaped matrix1= ",matrix1)
         for i in range(c):
             for j in range(d):
-                print("j=",j," i=",i)
+                # print("j=",j," i=",i)
                 result[i][j] = matrix1[i][j] + matrix2[i][j]
-    print("end result= ",result)
+    # print("end result= ",result)
     return result
 
 
@@ -67,6 +67,8 @@ def buildMatrix(matrix1,matrix2):
     # print("buildMatrix= ",newMatrix)
     return newMatrix
 
+def Relu(matrix):
+    return 0
 
 
 def printMatrixShape(self, matrix1):
