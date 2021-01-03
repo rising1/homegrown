@@ -8,23 +8,26 @@ def dotOperation( operation, matrix1, matrix2):
     b = len(matrix1[0])
     c = len(matrix2)
     d = len(matrix2[0])
-
-    if (a == d and b == c):
-        matrix1 = reshape(matrix1)
-    result = [[0 for col in range(d)] for row in range(c)]
-    for i in range(c):
-        for j in range(d):
-            if operation == "multiply_elements":
-                result[i][j] = matrix1[i][j] * matrix2[i][j]
-            if operation == "add_elements":
+    print("matrix1 shape= ",a,":",b," matrix2 shape= ",c,":",d)
+    if operation == "multiply_elements":
+        result = [[0 for col in range(d)] for row in range(a)]
+        print("result shape= ",len(result),":",len(result[0]))
+    if operation == "add_elements":
+        result = [[0 for col in range(d)] for row in range(c)]
+        print("result shape= ",len(result),":",len(result[0]))
+    if operation == "multiply_elements":
+        for i in range(c):
+            for j in range(d):
+                result[0][j] = result[0][j] + matrix1[0][i] * matrix2[i][j]
+    if operation == "add_elements":
+        if (a == d and b == c):
+            matrix1 = reshape(matrix1)
+            print("reshaped matrix1= ",matrix1)
+        for i in range(c):
+            for j in range(d):
+                print("j=",j," i=",i)
                 result[i][j] = matrix1[i][j] + matrix2[i][j]
-
-    if (a > c and b == c):
-        result = [[0 for col in range(b)] for row in range(a)]
-        for i in range(a):
-            for j in range(b):
-                if operation == "multiply_elements":
-                    result[i][j] = matrix1[i][j] * matrix2[j][j]
+    print("end result= ",result)
     return result
 
 
@@ -61,7 +64,7 @@ def buildMatrix(matrix1,matrix2):
     a = len(matrix1)
     c = len(matrix2)
     newMatrix = [[0.5 for col in range(c)] for row in range(a)]
-    print("buildMatrix= ",newMatrix)
+    # print("buildMatrix= ",newMatrix)
     return newMatrix
 
 

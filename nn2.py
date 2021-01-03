@@ -8,9 +8,10 @@ class NN2:
         self.final = [[0 for col in range(1)] for row in range(2)]
         self.weights1 = ut.buildMatrix(input_set[0],self.hidden)
         self.weights2 = ut.buildMatrix(self.hidden,self.final)
-        self.biases1 = [[0.5]]
+        self.biases1 = [[0.5 for col in range(1)] for row in range(4)]
         self.biases2 = [[0.5]]
         # print("self.hidden= ",self.hidden)
+        # print("biases1 = ",self.biases1)
         # print("self.final= ",self.final)
         # print("self.weights1= ",self.weights1)
 
@@ -22,18 +23,18 @@ class NN2:
         self.batch = [batch]  # changes [0,0,1] to [[0,0,1]] - a (1,3) shape vector
 
         # multiply the inputs by the weightings
-        self.inputWeights = ut.dotOperation("multiply_elements", self.batch, self.weights1)
-
-        # add the contents of the above vector together - makes a (1,1) vector
-        self.sumInputWeights = ut.addVector(self.inputWeights)
+        self.sumInputsTimesWeights = ut.dotOperation("multiply_elements", self.batch, self.weights1)
+        # print("inputBatch= ",self.batch," self.weights1= ",self.weights1)
+        # print("inputsTimesWeights= ",self.inputsTimesWeights)
 
         # add the result of the above inputs/weights sum above to the bias vector
-        self.z1 = ut.dotOperation("add_elements", self.sumInputWeights, self.biases1)
+        self.z1 = ut.dotOperation("add_elements", self.sumInputsTimesWeights, self.biases1)
+        print("z1= ",self.z1)
 
         # now put the result through the 'ReLu' activation function
-        self.a1 = max(0, self.z1[0][0])
+        self.hidden = max(0, self.z1[0][0])
 
-        return self.a1
+        return self.hidden
 
     def calc_error(self, target):
 
@@ -57,7 +58,7 @@ class NN2:
                     self.dz1[i][j] = 0
 
         # Transpose the input batch
-        self.batchT = self.reshape(batch)
+        self.batchT = ut.reshape(batch)
 
         if self.z1[0][0] > 0:
 
@@ -65,9 +66,9 @@ class NN2:
             self.errorIncrement = [[2 * self.error * self.dz1[0][0]]]
 
             # dMSE/dZ1 * dZ1/dW - split into two lines for clarity
-            self.partgradWeights = self.dotOperation(
+            self.partgradWeights = ut.dotOperation(
                 "multiply_elements", self.batchT, self.errorIncrement)
-            self.gradientWeights = self.multiplyVector(1 / len(self.batchT[1]), self.partgradWeights)
+            self.gradientWeights = ut.multiplyVector(1 / len(self.batchT[1]), self.partgradWeights)
 
             # dMSE/dB = gradient of error with respect to bias
             self.gradientBias = 2 * self.error
@@ -78,38 +79,38 @@ class NN2:
             self.gradientWeights = 0
 
         # Calculate the weights and bias adjustment
-        self.weights1Adj = self.multiplyVector(- learning_rate, self.gradientWeights)
+        self.weights1Adj = ut.multiplyVector(- learning_rate, self.gradientWeights)
         self.biases1Adj = - learning_rate * self.gradientBias
 
         # Add the adjustements to the weights and the bias
-        self.weights1 = self.dotOperation("add_elements", self.weights1, self.weights1Adj)
+        self.weights1 = ut.dotOperation("add_elements", self.weights1, self.weights1Adj)
         self.biases1[0][0] = self.biases1[0][0] + self.biases1Adj
 
 
 if __name__ == '__main__':
 
-    # input_set = [[0, 0, 1]]
-    # labels = [[0]]
+    input_set = [[0, 1, 1]]
+    labels = [[1,0]]
 
-    input_set = [[0, 1, 0],
-                 [0, 0, 1],
-                 [1, 0, 0],
-                 [1, 1, 0],
-                 [1, 1, 1],
-                 [0, 0, 0]]
+    # input_set = [[0, 1, 0],
+    #             [0, 0, 1],
+    #             [1, 0, 0],
+    #             [1, 1, 0],
+    #             [1, 1, 1],
+    #             [0, 0, 0]]
 
-    labels = [[1],
-              [0],
-              [0],
-              [1],
-              [1],
-              [0]]
+    #labels = [[1],
+    #          [0],
+    #          [0],
+    #          [1],
+    #          [1],
+    #          [0]]
 
     mynn = NN2()
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01  # **** this is the learning rate factor
-    number_of_iterations = 240
+    number_of_iterations = 1
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
