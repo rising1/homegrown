@@ -68,7 +68,15 @@ def buildMatrix(matrix1,matrix2):
     return newMatrix
 
 def Relu(matrix):
-    return 0
+    a = len(matrix)
+    b = len(matrix[0])
+    for i in range(a):
+        for j in range(b):
+            if matrix[i][j] > 0:
+                continue
+            else:
+                matrix[i][j] = 0
+    return matrix
 
 
 def printMatrixShape(self, matrix1):
