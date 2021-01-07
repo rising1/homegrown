@@ -35,7 +35,7 @@ class NN2:
         self.hidden = ut.Relu(self.z1)
         print("hidden= ",self.hidden)
 
-        self.sumInputsTimesWeights2 = ut.dotOperation("multiply_elements", self.hidden, self.weights2)
+        self.sumInputsTimesWeights2 = ut.dotOperation("multiply_elements", ut.reshape(self.hidden), self.weights2)
         self.z2 = ut.dotOperation("add_elements", self.sumInputsTimesWeights2, self.biases2)
         self.a2 = ut.Relu(self.z1)
 
@@ -47,7 +47,7 @@ class NN2:
 
         # calculate the difference between the value of the activation above
         # and the correct target result
-        self.error = (self.a1 - target[0])
+        self.error = ut.dotOperation("subtract_elements", self.a2, target)
 
         # calculate the mean squared error (only one value so the mean is the same)
         self.meanSquaredError = (self.error ** 2)
