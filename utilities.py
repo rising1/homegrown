@@ -14,11 +14,9 @@ def dotOperation( operation, matrix1, matrix2):
     #if(b == c):
     #    matrix1 = reshape(matrix1)
     print("matrix1 shape= ",a,":",b," matrix2 shape= ",c,":",d)
-    if operation == "multiply_elements":
-        result = [[0 for col in range(d)] for row in range(c)]
-        print("result shape= ",len(result),":",len(result[0]))
-    if operation == "add_elements":
-        result = [[0 for col in range(d)] for row in range(c)]
+
+    result = [[0 for col in range(d)] for row in range(c)]
+    print("result shape= ",len(result),":",len(result[0]))
         # print("result shape= ",len(result),":",len(result[0]))
     if operation == "multiply_elements":
         for i in range(c-1):
