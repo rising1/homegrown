@@ -34,11 +34,11 @@ def dotOperation( operation, matrix1, matrix2):
     if operation == "subtract_elements":
         if (a == d and b == c):
             matrix1 = reshape(matrix1)
-            # print("reshaped matrix1= ",matrix1)
-        for i in range(a-1):
-            for j in range(d-1):
-                # print("j=",j," i=",i)
-                result[i][j] = matrix1[i][j] - matrix2[i][j]
+            print("reshaped matrix1= ",matrix1)
+        for i in range(b):
+            for j in range(a):
+                print("j=",j," i=",i)
+                result[i][j] = matrix2[i][j] - matrix1[i][j]
     print("end result= ",result)
     return result
 

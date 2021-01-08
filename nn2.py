@@ -39,23 +39,24 @@ class NN2:
         # print("hidden= ",self.hidden)
 
         self.inputsTimesWeights2 = ut.dotOperation("multiply_elements", ut.reshape(self.hidden), self.weights2)
-        print("inputsTimesWeights2= ",self.inputsTimesWeights2)
+        # print("inputsTimesWeights2= ",self.inputsTimesWeights2)
 
         self.sumInputsTimesWeights2 = ut.sumMatrix(self.inputsTimesWeights2)
-        print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
+        # print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
 
         self.z2 = ut.dotOperation("add_elements", self.sumInputsTimesWeights2, self.biases2)
         self.a2 = ut.Relu(self.z2)
 
-        print("a2= ",self.a2)
+        # print("a2= ",self.a2)
 
         return self.a2
 
-    def calc_error(self, target):
-
+    def calc_error(self, labels):
+        target = [labels]
         # calculate the difference between the value of the activation above
         # and the correct target result
-        self.error = ut.dotOperation("subtract_elements", self.a2, target)
+        self.error = ut.dotOperation("subtract_elements", target, self.a2)
+        print("error= ",self.error)
 
         # calculate the mean squared error (only one value so the mean is the same)
         self.meanSquaredError = ut.addVector(ut.dotOperation(
@@ -107,7 +108,7 @@ class NN2:
 if __name__ == '__main__':
 
     input_set = [[0, 1, 1]]
-    labels = [[1,0]]
+    labels = [[1, 0]]
 
     # input_set = [[0, 1, 0],
     #             [0, 0, 1],
@@ -131,6 +132,7 @@ if __name__ == '__main__':
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
+            print("input set[j] = ", input_set[j], "  labels[j]= ",labels[j])
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
             mynn.back_prop(input_set[j], learning_rate)
