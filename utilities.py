@@ -3,7 +3,7 @@
 # *********************************************************************
 
 def dotOperation( operation, matrix1, matrix2):
-    # print("matrix1= ",matrix1, " matrix2= ", matrix2)
+    print("matrix1= ",matrix1, " matrix2= ", matrix2)
     a = len(matrix1)
     b = len(matrix1[0])
     c = len(matrix2)
@@ -19,16 +19,16 @@ def dotOperation( operation, matrix1, matrix2):
     print("result shape= ",len(result),":",len(result[0]))
         # print("result shape= ",len(result),":",len(result[0]))
     if operation == "multiply_elements":
-        for i in range(c-1):
-            for j in range(d-1):
-                print("i,j=",i,j)
+        for i in range(c):
+            for j in range(d):
+                # print("i,j=",i,j)
                 result[i][j] =  matrix1[0][i] * matrix2[i][j]
     if operation == "add_elements":
         if (a == d and b == c):
             matrix1 = reshape(matrix1)
             # print("reshaped matrix1= ",matrix1)
-        for i in range(a-1):
-            for j in range(d-1):
+        for i in range(a):
+            for j in range(d):
                 # print("j=",j," i=",i)
                 result[i][j] = matrix1[i][j] + matrix2[i][j]
     if operation == "subtract_elements":
@@ -39,8 +39,20 @@ def dotOperation( operation, matrix1, matrix2):
             for j in range(d-1):
                 # print("j=",j," i=",i)
                 result[i][j] = matrix1[i][j] - matrix2[i][j]
-    # print("end result= ",result)
+    print("end result= ",result)
     return result
+
+def sumMatrix(matrix1):
+    a = len(matrix1)
+    b = len(matrix1[0])
+    result = [[0] for row in range(b)]
+    for i in range(a):
+        for j in range(b):
+            # print("i,j=", i, j)
+            result[j][0] = result[j][0] + matrix1[i][j]
+    # print("sumMatrixResult= ",result)
+    return result
+
 
 
 def addVector( vector):
