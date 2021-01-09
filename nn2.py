@@ -23,7 +23,7 @@ class NN2:
         self.batch = [batch]  # changes [0,0,1] to [[0,0,1]] - a (1,3) shape vector
 
         # multiply the inputs by the weightings
-        self.inputsTimesWeights1 = ut.dotOperation("multiply_elements", self.batch, self.weights1)
+        self.inputsTimesWeights1 = ut.dotOperation("vector_multiply_elements", self.batch, self.weights1)
         # print("inputBatch= ",self.batch," self.weights1= ",self.weights1)
         # print("inputsTimesWeights= ",self.inputsTimesWeights1)
 
@@ -38,7 +38,8 @@ class NN2:
         self.hidden = ut.Relu(self.z1)
         # print("hidden= ",self.hidden)
 
-        self.inputsTimesWeights2 = ut.dotOperation("multiply_elements", ut.reshape(self.hidden), self.weights2)
+        self.inputsTimesWeights2 = ut.dotOperation("vector_multiply_elements", ut.reshape(
+                                                    self.hidden), self.weights2)
         # print("inputsTimesWeights2= ",self.inputsTimesWeights2)
 
         self.sumInputsTimesWeights2 = ut.sumMatrix(self.inputsTimesWeights2)
@@ -56,16 +57,20 @@ class NN2:
         # calculate the difference between the value of the activation above
         # and the correct target result
         self.error = ut.dotOperation("subtract_elements", target, self.a2)
-        print("error= ",self.error)
+        # print("error= ",self.error)
 
         # calculate the mean squared error (only one value so the mean is the same)
-        self.meanSquaredError = ut.addVector(ut.dotOperation(
-                            "multiply_elements", self.error, self.error))
-        print("mean squared error= ",self.meanSquaredError)
+        self.SquaredError = ut.dotOperation(
+                            "multiply_elements", self.error, self.error)
+        # print("squared error= ",self.SquaredError)
+
+        self.meanSquaredError = ut.addVector(self.SquaredError)[0][0]/len(self.SquaredError)
+        # print("mean squared error= ",self.meanSquaredError)
 
     def back_prop(self, batch, learning_rate):
 
         # Prepare gradients of Z  dz/dw d( Batch * Weights + bias)/dw
+
         self.dz1 = self.z1
         # self.printMatrixShape(self.z1)
         for i in range(len(self.z1)):
@@ -75,8 +80,44 @@ class NN2:
                 else:
                     self.dz1[i][j] = 0
 
+        self.dz2 = self.z2
+        # self.printMatrixShape(self.z1)
+        for i in range(len(self.z2)):
+            for j in range(len(self.z2[0])):
+                if (self.z2[i][j] > 0):
+                    self.dz2[i][j] = 1
+                else:
+                    self.dz2[i][j] = 0
+
+        print("dz1= ",self.dz1, " dz2= ", self.dz2)
+
         # Transpose the input batch
         self.batchT = ut.reshape(batch)
+
+        if self.z2[0][0] > 0:
+
+            # dMSE/dZ2 = gradient of error with respect to Z2 ( Batch * Weights + bias)
+            self.errorIncrement2 = ut.dotOperation("multiply_elements",
+                                                       self.SquaredError , self.dz2)
+            print("errorIncrement2= ",self.errorIncrement2) # should be multiplied by 2
+
+            # dMSE/dZ2 * dZ2/dW - split into two lines for clarity
+            self.hiddenT = ut.reshape(self.hidden)
+            # print("hiddenT= ", self.hiddenT)
+
+            self.partgradWeights2 = ut.dotOperation(
+                "multiply_elements", self.hidden, self.errorIncrement2)
+            print("partgradWeights2= ",self.partgradWeights2)
+
+            self.gradientWeights = ut.multiplyVector(1 / len(self.batchT[1]), self.partgradWeights)
+
+            # dMSE/dB = gradient of error with respect to bias
+            self.gradientBias = 2 * self.error
+
+        else:
+
+            self.gradientBias = 0
+            self.gradientWeights = 0
 
         if self.z1[0][0] > 0:
 

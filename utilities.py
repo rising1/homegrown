@@ -18,11 +18,16 @@ def dotOperation( operation, matrix1, matrix2):
     result = [[0 for col in range(d)] for row in range(c)]
     print("result shape= ",len(result),":",len(result[0]))
         # print("result shape= ",len(result),":",len(result[0]))
-    if operation == "multiply_elements":
+    if operation == "vector_multiply_elements":
         for i in range(c):
             for j in range(d):
                 # print("i,j=",i,j)
                 result[i][j] =  matrix1[0][i] * matrix2[i][j]
+    if operation == "multiply_elements":
+        for i in range(c):
+            for j in range(d):
+                # print("i,j=",i,j)
+                result[i][j] =  matrix1[i][j] * matrix2[i][j]
     if operation == "add_elements":
         if (a == d and b == c):
             matrix1 = reshape(matrix1)
@@ -34,10 +39,10 @@ def dotOperation( operation, matrix1, matrix2):
     if operation == "subtract_elements":
         if (a == d and b == c):
             matrix1 = reshape(matrix1)
-            print("reshaped matrix1= ",matrix1)
+            # print("reshaped matrix1= ",matrix1)
         for i in range(b):
             for j in range(a):
-                print("j=",j," i=",i)
+                # print("j=",j," i=",i)
                 result[i][j] = matrix2[i][j] - matrix1[i][j]
     print("end result= ",result)
     return result
