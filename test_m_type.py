@@ -5,7 +5,8 @@ from ut import m
 
 class TestMType(TestCase):
 
-    global matrix1, list1, matrix2
+    global matrix1, list1, matrix2, matrix3, matrix4
+    global matrix5
 
     matrix1 = [[0, 0, 1]]
     list1 = matrix1[0]
@@ -13,6 +14,8 @@ class TestMType(TestCase):
                [0, 2, 3, 125],
                [10, 20, 30, 40]]
     matrix3 = [[1, 1, 0]]
+    matrix4 = [[2, 3, 4]]
+    matrix5 = [[3, 3, 3]]
 
     def test_check_matrix_type(self):
         result = m_type(matrix1)
@@ -30,6 +33,14 @@ class TestMType(TestCase):
         result = m('dot', matrix1, matrix2)
         self.assertEqual(result, [[10, 20, 30, 40]])
 
-    def test_check_mDot(self):
-        result = m('add', matrix1, matrix2)
+    def test_check_mDot2(self):
+        result = m('add', matrix1, matrix3)
         self.assertEqual(result, [[1, 1, 1]])
+
+    def test_check_mDot3(self):
+        result = m('minus', matrix1, matrix3)
+        self.assertEqual(result, [[1, 1, -1]])
+
+    def test_check_mDot4(self):
+        result = m('mse', matrix5, matrix4)
+        self.assertEqual(result, [[9]])

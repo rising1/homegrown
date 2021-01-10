@@ -39,14 +39,14 @@ class NN2:
         self.hidden = ut.Relu(self.z1)
         # print("hidden= ",self.hidden)
 
-        self.inputsTimesWeights2 = ut.dotOperation("vector_multiply_elements", ut.reshape(
+        self.sumInputsTimesWeights2 = ut.m("dot", ut.reshape(
                                                     self.hidden), self.weights2)
         # print("inputsTimesWeights2= ",self.inputsTimesWeights2)
 
-        self.sumInputsTimesWeights2 = ut.sumMatrix(self.inputsTimesWeights2)
-        print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
+        # self.sumInputsTimesWeights2 = ut.sumMatrix(self.inputsTimesWeights2)
+        # print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
 
-        self.z2 = ut.dotOperation("add_elements", self.sumInputsTimesWeights2, self.biases2)
+        self.z2 = ut.m("add", self.sumInputsTimesWeights2, self.biases2)
         self.a2 = ut.Relu(self.z2)
 
         # print("a2= ",self.a2)
@@ -57,16 +57,13 @@ class NN2:
         target = [labels]
         # calculate the difference between the value of the activation above
         # and the correct target result
-        self.error = ut.dotOperation("subtract_elements", target, self.a2)
+        self.error = ut.m("minus", target, self.a2)
         # print("error= ",self.error)
 
         # calculate the mean squared error (only one value so the mean is the same)
-        self.SquaredError = ut.dotOperation(
-                            "multiply_elements", self.error, self.error)
-        # print("squared error= ",self.SquaredError)
+        self.mse = ut.m("mse", self.error, self.error)
+        print("mse= ",self.mse)
 
-        self.meanSquaredError = ut.addVector(self.SquaredError)[0][0]/len(self.SquaredError)
-        # print("mean squared error= ",self.meanSquaredError)
 
     def back_prop(self, batch, learning_rate):
 
