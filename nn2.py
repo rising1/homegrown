@@ -89,9 +89,6 @@ class NN2:
 
         print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
-        # Transpose the input batch
-        self.batchT = ut.reshape(batch)
-
         if self.z2[0][0] > 0:
 
             # dMSE/dZ2 = gradient of error with respect to Z2 ( Batch * Weights + bias)
@@ -102,11 +99,10 @@ class NN2:
             self.hiddenT = ut.reshape(self.hidden)
             # print("hiddenT= ", self.hiddenT)
 
-            self.partgradWeights2 = ut.dotOperation(
-                "multiply_elements", self.hidden, self.errorIncrement2)
+            self.partgradWeights2 = ut.m("mult",self.hiddenT, self.errorIncrement2)
             print("partgradWeights2= ",self.partgradWeights2)
 
-            self.gradientWeights = ut.multiplyVector(1 / len(self.batchT[1]), self.partgradWeights)
+            self.gradientWeights = ut.times(1 / len(self.batchT[1]), 1, self.partgradWeights)
 
             # dMSE/dB = gradient of error with respect to bias
             self.gradientBias = 2 * self.error

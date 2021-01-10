@@ -21,11 +21,11 @@ def m(op, m1, m2):
 
     if op == 'mult':
         result = [[0 for col in range(col2)] for row in range(row1)]
+        # print("result=", result)
         for i in range(row1):
             for j in range(col1):
                 for y in range(col2):
-                    result[i][y] =  m1[i][j] * m2[j][y]
-        print("result=", result)
+                    result[i][y] = m1[i][j] * m2[j][y]
         return result
 
     if op == 'add':
