@@ -1,4 +1,5 @@
-import utilities as ut
+import utilities as ut1
+import ut
 
 class NN2:
 
@@ -23,15 +24,15 @@ class NN2:
         self.batch = [batch]  # changes [0,0,1] to [[0,0,1]] - a (1,3) shape vector
 
         # multiply the inputs by the weightings
-        self.inputsTimesWeights1 = ut.dotOperation("vector_multiply_elements", self.batch, self.weights1)
+        self.sumInputsTimesWeights1 = ut.m("dot", self.batch, self.weights1)
         # print("inputBatch= ",self.batch," self.weights1= ",self.weights1)
         # print("inputsTimesWeights= ",self.inputsTimesWeights1)
 
-        self.sumInputsTimesWeights1 = ut.sumMatrix(self.inputsTimesWeights1)
+        # self.sumInputsTimesWeights1 = ut.sumMatrix(self.inputsTimesWeights1)
         # print("sumInputsTimesWeights= ", self.sumInputsTimesWeights1)
 
         # add the result of the above inputs/weights sum above to the bias vector
-        self.z1 = ut.dotOperation("add_elements", self.sumInputsTimesWeights1, self.biases1)
+        self.z1 = ut.m("add", self.sumInputsTimesWeights1, self.biases1)
         # print("z1= ",self.z1)
 
         # now put the result through the 'ReLu' activation function
@@ -43,7 +44,7 @@ class NN2:
         # print("inputsTimesWeights2= ",self.inputsTimesWeights2)
 
         self.sumInputsTimesWeights2 = ut.sumMatrix(self.inputsTimesWeights2)
-        # print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
+        print("sumInputsTimesWeights2= ", self.sumInputsTimesWeights2)
 
         self.z2 = ut.dotOperation("add_elements", self.sumInputsTimesWeights2, self.biases2)
         self.a2 = ut.Relu(self.z2)

@@ -5,9 +5,31 @@ def m(op, m1, m2):
     print("matrix1 = ", m1, " matrix2 = ", m2, " op= ", op)
     row1, col1 = m_type(m1)
     row2, col2 = m_type(m2)
+    if row1 == 0:
+        m1 = [m1]
+        row1, col1 = m_type(m1)
     print("row1=", row1, " col1=", col1, "row2=", row2, " col2=", col2)
-    result = [[0 for col in range(col1)] for row in range(row2)]
-    print("result=", result)
+
+    if op == 'dot':
+        if col1 == row2 and col2 > col1:
+            result = [[0 for col in range(col2)] for row in range(row1)]
+            print("result=", result)
+            for i in range(row1):
+                for j in range(col1):
+                    for y in range(col2):
+                        result[i][y] = result[i][y] + m1[i][j] * m2[j][y]
+        return result
+
+    if op == 'add':
+        if not (row1 == row2 and col1 == col2):
+            m1 = reshape(m1)
+        result = [[0 for col in range(col)] for row in range(row1)]
+        for i in range(row1):
+            for j in range(row2):
+                result[i][j] = m1[i][j] + m2[i][j]
+        print("result=", result)
+        return result
+
 
 def m_type(matrix):
     if isinstance(matrix[0], int):
@@ -18,6 +40,40 @@ def m_type(matrix):
         col = len(matrix[0])
     print("row=", row, " col=", col)
     return [row, col]
+
+def reshape( matrix):
+    a = len(matrix)
+    if (not isinstance(matrix[0], int)):
+        b = len(matrix[0])
+        newMatrix = [[0 for col in range(a)] for row in range(b)]
+        for i in range(a):
+            for j in range(b):
+                newMatrix[j][i] = matrix[i][j]
+    else:
+        newMatrix = [[0] for col in range(a)]
+        for i in range(a):
+            newMatrix[i][0] = matrix[i]
+    return newMatrix
+
+def buildMatrix(matrix1,matrix2):
+    a = len(matrix1)
+    c = len(matrix2)
+    newMatrix = [[0.5 for col in range(c)] for row in range(a)]
+    # print("buildMatrix= ",newMatrix)
+    return newMatrix
+
+def Relu(matrix):
+    a = len(matrix)
+    b = len(matrix[0])
+    for i in range(a):
+        for j in range(b):
+            if matrix[i][j] > 0:
+                continue
+            else:
+                matrix[i][j] = 0
+    return matrix
+
+
 
 
 if __name__ == "__main__":
