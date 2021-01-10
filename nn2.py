@@ -95,8 +95,7 @@ class NN2:
         if self.z2[0][0] > 0:
 
             # dMSE/dZ2 = gradient of error with respect to Z2 ( Batch * Weights + bias)
-            self.errorIncrement2 = ut.dotOperation("multiply_elements",
-                                                       self.SquaredError , self.dz2)
+            self.errorIncrement2 = ut.times(2, self.mse[0][0], self.dz2)
             print("errorIncrement2= ",self.errorIncrement2) # should be multiplied by 2
 
             # dMSE/dZ2 * dZ2/dW - split into two lines for clarity

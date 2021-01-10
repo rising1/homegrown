@@ -19,6 +19,15 @@ def m(op, m1, m2):
                     result[i][y] = result[i][y] + m1[i][j] * m2[j][y]
         return result
 
+    if op == 'mult':
+        result = [[0 for col in range(col2)] for row in range(row1)]
+        for i in range(row1):
+            for j in range(col1):
+                for y in range(col2):
+                    result[i][y] =  m1[i][j] * m2[j][y]
+        print("result=", result)
+        return result
+
     if op == 'add':
         if not (row1 == row2 and col1 == col2):
             m1 = reshape(m1)
@@ -48,6 +57,14 @@ def m(op, m1, m2):
             for j in range(col1):
                 result[0][0] = result[0][0] + (m2[i][j] * m1[i][j])
         result[0][0] = result[0][0] / col1
+        return result
+
+def times(scalar1, scalar2, m1):
+        row1, col1 = m_type(m1)
+        result = [[0 for col in range(col1)] for row in range(row1)]
+        for i in range(row1):
+            for j in range(col1):
+                result[i][j] = m1[i][j] * scalar1 * scalar2
         return result
 
 def m_type(matrix):
