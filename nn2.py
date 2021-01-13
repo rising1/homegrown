@@ -58,7 +58,7 @@ class NN2:
         # calculate the difference between the value of the activation above
         # and the correct target result
         self.error = ut.m("minus", target, self.a2)
-        # print("error= ",self.error)
+        print("error= ",self.error)
 
         # calculate the mean squared error (only one value so the mean is the same)
         self.mse = ut.m("mse", self.error, self.error)
@@ -92,7 +92,7 @@ class NN2:
         if self.z2[0][0] > 0:
 
             # dMSE/dZ2 = gradient of error with respect to Z2 ( Batch * Weights + bias)
-            self.errorIncrement2 = ut.times(2, self.mse[0][0], self.dz2)
+            self.errorIncrement2 = ut.times(2, self.error[0][0], self.dz2[0][0])
             print("errorIncrement2= ",self.errorIncrement2) # should be multiplied by 2
 
             # dMSE/dZ2 * dZ2/dW - split into two lines for clarity
