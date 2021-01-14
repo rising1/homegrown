@@ -91,10 +91,10 @@ def reshape( matrix):
             newMatrix[i][0] = matrix[i]
     return newMatrix
 
-def buildMatrix(matrix1,matrix2):
+def buildMatrix(matrix1,matrix2,val):
     a = len(matrix1)
     c = len(matrix2)
-    newMatrix = [[0.5 for col in range(c)] for row in range(a)]
+    newMatrix = [[val for col in range(c)] for row in range(a)]
     # print("buildMatrix= ",newMatrix)
     return newMatrix
 

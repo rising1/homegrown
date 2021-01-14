@@ -7,10 +7,14 @@ class NN2:
 
         self.hidden  = [[0 for col in range(1)] for row in range(4)]
         self.final = [[0 for col in range(1)] for row in range(2)]
-        self.weights1 = ut.buildMatrix(input_set[0],self.hidden)
-        self.weights2 = ut.buildMatrix(self.hidden,self.final)
+        self.weights1 = ut.buildMatrix(input_set[0],self.hidden,0.5)
+        self.weights1adj = ut.buildMatrix(input_set[0],self.hidden,0)
+        self.weights2 = ut.buildMatrix(self.hidden,self.final,0.5)
+        self.weights2adj = ut.buildMatrix(self.hidden, self.final,0)
         self.biases1 = [[0.5 for col in range(1)] for row in range(4)]
+        self.biases1adj = [[0.0 for col in range(1)] for row in range(4)]
         self.biases2 = [[0.5 for col in range(1)] for row in range(2)]
+        self.biases2adj = [[0.0 for col in range(1)] for row in range(2)]
         # print("self.hidden= ",self.hidden)
         # print("biases1 = ",self.biases1)
         # print("self.final= ",self.final)
@@ -89,54 +93,7 @@ class NN2:
 
         print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
-        if self.z2[0][0] > 0:
 
-            # dMSE/dZ2 = gradient of error with respect to Z2 ( Batch * Weights + bias)
-            self.errorIncrement2 = ut.times(2, self.error[0][0], self.dz2[0][0])
-            print("errorIncrement2= ",self.errorIncrement2) # should be multiplied by 2
-
-            # dMSE/dZ2 * dZ2/dW - split into two lines for clarity
-            self.hiddenT = ut.reshape(self.hidden)
-            # print("hiddenT= ", self.hiddenT)
-
-            self.partgradWeights2 = ut.m("mult",self.hidden, self.errorIncrement2)
-            print("partgradWeights2= ",self.partgradWeights2)
-
-            self.gradientWeights = ut.times(1 / len(self.hidden[1]), 1, self.partgradWeights2)
-
-            # dMSE/dB = gradient of error with respect to bias
-            self.gradientBias2 = 2 * self.error
-
-        else:
-
-            self.gradientBias = 0
-            self.gradientWeights = 0
-
-        if self.z1[0][0] > 0:
-
-            # dMSE/dZ1 = gradient of error with respect to Z1 ( Batch * Weights + bias)
-            self.errorIncrement1 = [[2 * self.error * self.dz1[0][0]]]
-
-            # dMSE/dZ1 * dZ1/dW - split into two lines for clarity
-            self.partgradWeights = ut.dotOperation(
-                "multiply_elements", self.batchT, self.errorIncrement)
-            self.gradientWeights = ut.multiplyVector(1 / len(self.batchT[1]), self.partgradWeights)
-
-            # dMSE/dB = gradient of error with respect to bias
-            self.gradientBias = 2 * self.error
-
-        else:
-
-            self.gradientBias = 0
-            self.gradientWeights = 0
-
-        # Calculate the weights and bias adjustment
-        self.weights1Adj = ut.multiplyVector(- learning_rate, self.gradientWeights)
-        self.biases1Adj = - learning_rate * self.gradientBias
-
-        # Add the adjustements to the weights and the bias
-        self.weights1 = ut.dotOperation("add_elements", self.weights1, self.weights1Adj)
-        self.biases1[0][0] = self.biases1[0][0] + self.biases1Adj
 
 
 if __name__ == '__main__':
@@ -173,7 +130,7 @@ if __name__ == '__main__':
 
             # track the error in the model
             if (i % (number_of_iterations / 10) == 0):
-                print("error= ", mynn.meanSquaredError)
+                print("error= ", mynn.mse)
 
     # see what the final weights values are and bias value
     print("\n final weights= ", mynn.weights1, "\n")
