@@ -93,7 +93,7 @@ class NN2:
 
         print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
-
+        self.weights2adj = ut.m(self.hidden,self.error)
 
 
 if __name__ == '__main__':
