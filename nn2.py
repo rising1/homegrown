@@ -93,7 +93,13 @@ class NN2:
 
         print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
-        self.weights2adj = ut.m(self.hidden,self.error)
+        # calculate dE/dW2
+        #    2 x 1                              2 x 1    2 x 1
+        self.activatedGradient = ut.m("mult", self.dz2, self.error)
+
+        #  4 x 2         =                  4 x 1       1 x 2
+        self.weights2adj = ut.m("mult", self.hidden, self.activatedGradient)
+        print("weights2adj= ", self.weights2adj)
 
 
 if __name__ == '__main__':
@@ -130,7 +136,7 @@ if __name__ == '__main__':
 
             # track the error in the model
             if (i % (number_of_iterations / 10) == 0):
-                print("error= ", mynn.mse)
+                print("mse= ", mynn.mse)
 
     # see what the final weights values are and bias value
     print("\n final weights= ", mynn.weights1, "\n")
