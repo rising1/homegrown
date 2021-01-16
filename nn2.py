@@ -139,28 +139,28 @@ class NN2:
 
 if __name__ == '__main__':
 
-    input_set = [[0, 1, 1]]
-    labels = [[1, 0]]
+    #input_set = [[0, 1, 1]]
+    #labels = [[1, 0]]
 
-    # input_set = [[0, 1, 0],
-    #             [0, 0, 1],
-    #             [1, 0, 0],
-    #             [1, 1, 0],
-    #             [1, 1, 1],
-    #             [0, 0, 0]]
+    input_set = [[0, 1, 0],
+                 [0, 0, 1],
+                 [1, 0, 0],
+                 [1, 1, 0],
+                 [1, 1, 1],
+                 [0, 0, 0]]
 
-    #labels = [[1],
-    #          [0],
-    #          [0],
-    #          [1],
-    #          [1],
-    #          [0]]
+    labels = [[1],
+              [0],
+              [0],
+              [1],
+              [1],
+              [0]]
 
     mynn = NN2()
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01  # **** this is the learning rate factor
-    number_of_iterations = 1000
+    number_of_iterations = 100000
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
