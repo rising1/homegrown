@@ -93,13 +93,28 @@ class NN2:
 
         print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
+        ####################################################################
         # calculate dE/dW2
+        ####################################################################
         #    2 x 1                              2 x 1    2 x 1
         self.activatedGradient = ut.m("mult", self.dz2, self.error)
+        # print("activatedGradient= ", self.activatedGradient)
 
         #  4 x 2         =                  4 x 1       1 x 2
-        self.weights2adj = ut.m("mult", self.hidden, self.activatedGradient)
-        print("weights2adj= ", self.weights2adj)
+        self.weights2adj = ut.m("mult", self.hidden, ut.reshape(self.activatedGradient))
+        # multiply the weights adj by the learning rate
+        self.weights2adj = ut.times(learning_rate, 1, self.weights2adj)
+        # print("weights2adj= ", self.weights2adj)
+        # subtract the adjusted weights
+        self.weights2 = ut.m("minus", self.weights2adj, self.weights2 )
+        # print("weights2= ", self.weights2)
+
+        ####################################################################
+        # calculate dE/dB2
+        ####################################################################
+
+        self.biases2adj = ut.times(learning_rate, 1, self.activatedGradient)
+
 
 
 if __name__ == '__main__':
@@ -139,9 +154,10 @@ if __name__ == '__main__':
                 print("mse= ", mynn.mse)
 
     # see what the final weights values are and bias value
-    print("\n final weights= ", mynn.weights1, "\n")
-    print("final bias= ", mynn.biases1, "\n")
-
+    print("\n final weights1= ", mynn.weights1, "\n")
+    print("\n final weights=2 ", mynn.weights2, "\n")
+    print("final bias1= ", mynn.biases1, "\n")
+    print("final bias2= ", mynn.biases2, "\n")
     print("test [1, 0, 1] should be 0 = ", mynn.feedforward([1, 0, 1]))
     print("test [0, 1, 1] should be 1 = ", mynn.feedforward([0, 1, 1]))
 
