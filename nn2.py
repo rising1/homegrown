@@ -160,8 +160,8 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01  # **** this is the learning rate factor
-    number_of_iterations = 100000
-
+    number_of_iterations = 10000
+    start_time = ut.getTime()
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
             # print("input set[j] = ", input_set[j], "  labels[j]= ",labels[j])
@@ -172,7 +172,8 @@ if __name__ == '__main__':
             # track the error in the model
             if (i % (number_of_iterations / 10) == 0):
                 print("mse= ", mynn.mse)
-
+    end_time = ut.getTime()
+    print("\n--- %s seconds ---" % (end_time - start_time))
     # see what the final weights values are and bias value
     print("\n final weights1= ", mynn.weights1, "\n")
     print("\n final weights=2 ", mynn.weights2, "\n")

@@ -1,5 +1,5 @@
 # Matrix utilities
-
+import time
 
 def m(op, m1, m2):
     # print("matrix1 = ", m1, " matrix2 = ", m2, " op= ", op)
@@ -109,7 +109,8 @@ def Relu(matrix):
                 matrix[i][j] = 0
     return matrix
 
-
+def getTime():
+       return time.time()
 
 
 if __name__ == "__main__":

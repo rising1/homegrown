@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+
 from ut import m_type
 from ut import m
 from ut import times
@@ -58,3 +59,4 @@ class TestMType(TestCase):
         result = m('mult', matrix6, matrix7)
         self.assertEqual(result,
          [[2.3, 5.0, 4.9, 10.2], [4.6, 10.0, 9.8, 20.4]])
+
