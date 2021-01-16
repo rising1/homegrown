@@ -62,11 +62,11 @@ class NN2:
         # calculate the difference between the value of the activation above
         # and the correct target result
         self.error = ut.m("minus", target, self.a2)
-        print("error= ",self.error)
+        # print("error= ",self.error)
 
         # calculate the mean squared error (only one value so the mean is the same)
         self.mse = ut.m("mse", self.error, self.error)
-        print("mse= ",self.mse)
+        # print("mse= ",self.mse)
 
 
     def back_prop(self, batch, learning_rate):
@@ -91,7 +91,7 @@ class NN2:
                 else:
                     self.dz2[i][j] = 0
 
-        print("dz1= ",self.dz1, " dz2= ", self.dz2)
+        # print("dz1= ",self.dz1, " dz2= ", self.dz2)
 
         ####################################################################
         # calculate dE/dW2
@@ -99,15 +99,12 @@ class NN2:
         #    2 x 1                              2 x 1    2 x 1
         self.activatedGradient = ut.m("mult", self.dz2, self.error)
         # print("activatedGradient= ", self.activatedGradient)
-
         #  4 x 2         =                  4 x 1       1 x 2
         self.weights2adj = ut.m("mult", self.hidden, ut.reshape(self.activatedGradient))
         # multiply the weights adj by the learning rate
         self.weights2adj = ut.times(learning_rate, 1, self.weights2adj)
         # print("weights2adj= ", self.weights2adj)
-        # subtract the adjusted weights
-        self.weights2 = ut.m("minus", self.weights2adj, self.weights2 )
-        # print("weights2= ", self.weights2)
+
 
         ####################################################################
         # calculate dE/dB2
@@ -115,7 +112,30 @@ class NN2:
 
         self.biases2adj = ut.times(learning_rate, 1, self.activatedGradient)
 
+        ####################################################################
+        # calculate dE/dW1
+        ####################################################################
+        #    2 x 1                              2 x 1    2 x 1
+        self.activatedGradient = ut.m("mult", self.dz2, self.error)
+        self.weights1partadj = ut.m("mult", ut.reshape(self.activatedGradient),
+                                                ut.reshape(self.weights2))
+        self.weights1adj = ut.m("mult", ut.reshape(batch), self.weights1partadj)
+        self.weights1adj = ut.times(learning_rate, 1, self.weights1adj)
+        # print("weights1adj= ", self.weights1adj)
 
+        ####################################################################
+        # calculate dE/dB1
+        ####################################################################
+
+        self.biases1adj = ut.times(learning_rate, 1, self.weights1partadj)
+
+        # subtract the adjusted weights
+        self.weights2 = ut.m("minus", self.weights2adj, self.weights2)
+        self.weights1 = ut.m("minus", self.weights1adj, self.weights1)
+        # print("weights2= ", self.weights2)
+        self.biases2 = ut.m("minus", self.biases2adj, self.biases2)
+        self.biases1 = ut.m("minus", self.biases1adj, self.biases1)
+        # print("biases2= ", self.biases2)
 
 if __name__ == '__main__':
 
@@ -140,11 +160,11 @@ if __name__ == '__main__':
 
     # Parameters learning rate and number of iterations in which to learn
     learning_rate = .01  # **** this is the learning rate factor
-    number_of_iterations = 1
+    number_of_iterations = 1000
 
     for i in range(number_of_iterations):
         for j in range(len(input_set)):
-            print("input set[j] = ", input_set[j], "  labels[j]= ",labels[j])
+            # print("input set[j] = ", input_set[j], "  labels[j]= ",labels[j])
             mynn.feedforward(input_set[j])
             mynn.calc_error(labels[j])
             mynn.back_prop(input_set[j], learning_rate)
