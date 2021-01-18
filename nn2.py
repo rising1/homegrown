@@ -1,4 +1,4 @@
-cimport utilities as ut1
+import utilities as ut1
 import ut
 
 class NN2:
