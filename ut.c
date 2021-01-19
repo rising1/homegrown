@@ -1,8 +1,10 @@
-# include <stdio.h>
+#include <stdio.h>
 
-#define
+int main(int argc, char* argv[]){
+
+int hidden[4][1];
 
 
-/* int main(void){
+
     printf("Hello World!\n");
-} */
+}
