@@ -4,32 +4,27 @@
 
 double **create_matrix(int m, int n)
 {
-    double **p;
+    double **p, *q;
     int i;
     assert(m>0 && n>0);
+
     p = (double **)malloc(m * sizeof(double *));
     if(p == NULL) return p;
-    for(i=0;i<m;++i)
-    {
-        p[i] = (double *)malloc(n*sizeof(double));
-        if(p[i] == NULL)
-            goto failed;
+    q = (double *)malloc(m * n * sizeof(double ));
+    if(q==NULL){
+        free(p);
+        return NULL;
     }
+    for(i=0; i<m; ++i, q+=n)
+        p[i] = q;
+
     return p;
 
-failed:
-    for(--i;i>=0;--i)
-        free(p[i]);
-    free(p);
-    return NULL;
 }
 
-void mult(int *p1, int *p2)
+void dot_mult(double **p1, double **p2)
 {
 	printf("in mult funtion");
 }
 
-void set_weights(int *p1)
-{
-	printf("in mult funtion");
-}
+
