@@ -1,34 +1,17 @@
-﻿# include <stdio.h>
-#include <ut.h>
+﻿#include <stdio.h>
+#include "ut.h"
 
 #define INPUTS_R 1
 #define INPUTS_C 3
 #define HIDDEN_SIZE 4
 #define OUTPUTS 2
 
-double hidden[HIDDEN_SIZE];
-double weights1[INPUTS_C][HIDDEN_SIZE];
-double weights2[HIDDEN_SIZE][OUTPUTS];
-double output[OUTPUTS];
-double bias1[HIDDEN_SIZE];
-double bias2[OUTPUTS];
-double weights1adj[INPUTS_C][HIDDEN_SIZE];
-double weights2adj[HIDDEN_SIZE][OUTPUTS];
-double bias1adj[HIDDEN_SIZE];
-double bias2adj[OUTPUTS];
-
-int *phidden = &hidden;
-int *pweights1 = &weights1;
-int *pweights2 = &weights2;
-int *pweights1adj = &weights1adj;
-int *pweights2adj = &weights2adj;
-int *pbias1 = &bias1;
-int *pbias2 = &bias2;
-int *pbias1adj = &bias1adj;
-int *pbias2adj = &bias2adj;
 
 
+void set_up_model()
+{
 
+}
 
 int main(int argc, char* argv[]){
 
@@ -38,13 +21,27 @@ int main(int argc, char* argv[]){
     	printf("argv[%d]= %s\n",i,argv[i]);
     }
 
-   int inputs[][3] = [[1,1,0]];
-   int *pinputs = &inputs;
-   int outputs[][2] = {[1,0]};
-   int *poutputs = &outputs;
+    set_up_model();
 
-
-
-   mult( phidden, pweights1);
+    double **weights1 =
+        create_matrix(INPUTS_C,HIDDEN_SIZE);
+    double **bias1 =
+        create_matrix(HIDDEN_SIZE,1);
+    double **hidden =
+        create_matrix(HIDDEN_SIZE,1);
+    double **weights2 =
+        create_matrix(HIDDEN_SIZE,OUTPUTS);
+    double **bias2 =
+        create_matrix(OUTPUTS,1);
+    double **outputs =
+        create_matrix(OUTPUTS,1);
+    double **weights1adj =
+        create_matrix(INPUTS_C,HIDDEN_SIZE);
+    double **bias1adj =
+        create_matrix(HIDDEN_SIZE,1);
+    double **weights2adj =
+        create_matrix(HIDDEN_SIZE,OUTPUTS);
+    double **bias2adj =
+        create_matrix(OUTPUTS,1);
 
 } 
