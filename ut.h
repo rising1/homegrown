@@ -33,11 +33,17 @@ void destroy_matrix(double **p, int m, int n)
 /* The return type is actually `int (*)[r]`,
 but C doesn't like that. Call this function with
 int (*a)[2] = (int (*)[2])f_MatTrans(2, 3, x); */
-int* transpose(int r, int c, int mat[][c]) {
-    int (*a)[r] = malloc(c*sizeof(*a));
+double* transpose(int r, int c, double mat[][c]) {
+    double (*a)[r] = malloc(c*sizeof(*a));
     for(int i=0; i<r; i++) {
         for(int j=0; j<c; j++) {
             a[j][i]=mat[i][j];
+        }
+    }
+    for(int i=0; i<r; i++) {
+        for(int j=0; j<c; j++) {
+            printf("X[%d][%d]=%f\n",i,j,mat[i][j]);
+            printf("A[%d][%d]=%f\n",i,j,a[i][j]);
         }
     }
     return *a;
