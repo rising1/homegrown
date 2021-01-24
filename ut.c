@@ -1,5 +1,4 @@
-﻿#include <stdio.h>
-#include "ut.h"
+﻿#include "ut.h"
 
 #define INPUTS_R 1
 #define INPUTS_C 3

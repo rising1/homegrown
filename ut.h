@@ -19,8 +19,21 @@ double **create_matrix(int m, int n)
         p[i] = q;
 
     return p;
-
 }
+
+void destroy_matrix(double **p, int m, int n)
+/* Destroy an (m x n) matrix. Notice, the n variable
+* is not used, it is just there to assist using the function. */
+{
+    int i;
+    assert(m>0 && n>0);
+
+    for (i = 0; i < m; ++i)
+    free(p[i]);
+    free(p);
+}
+
+
 
 void dot_mult(double **p1, double **p2)
 {
