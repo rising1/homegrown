@@ -7,7 +7,6 @@ double **create_matrix(int m, int n)
     double **p, *q;
     int i;
     assert(m>0 && n>0);
-
     p = (double **)malloc(m * sizeof(double *));
     if(p == NULL) return p;
     q = (double *)malloc(m * n * sizeof(double ));
@@ -17,7 +16,6 @@ double **create_matrix(int m, int n)
     }
     for(i=0; i<m; ++i, q+=n)
         p[i] = q;
-
     return p;
 }
 
@@ -27,12 +25,23 @@ void destroy_matrix(double **p, int m, int n)
 {
     int i;
     assert(m>0 && n>0);
-
     for (i = 0; i < m; ++i)
-    free(p[i]);
+        free(p[i]);
     free(p);
 }
 
+/* The return type is actually `int (*)[r]`,
+but C doesn't like that. Call this function with
+int (*a)[2] = (int (*)[2])f_MatTrans(2, 3, x); */
+int* transpose(int r, int c, int mat[][c]) {
+    int (*a)[r] = malloc(c*sizeof(*a));
+    for(int i=0; i<r; i++) {
+        for(int j=0; j<c; j++) {
+            a[j][i]=mat[i][j];
+        }
+    }
+    return *a;
+}
 
 
 void dot_mult(double **p1, double **p2)
