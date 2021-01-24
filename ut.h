@@ -19,6 +19,12 @@ double **create_matrix(int m, int n)
     return p;
 }
 
+void populate_matrix(double **p, int m, int n)
+{
+ // code to populate matrix here
+}
+
+
 void destroy_matrix(double **p, int m, int n)
 /* Destroy an (m x n) matrix. Notice, the n variable
 * is not used, it is just there to assist using the function. */

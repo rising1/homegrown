@@ -43,4 +43,6 @@ int main(int argc, char* argv[]){
     double **bias2adj =
         create_matrix(OUTPUTS,1);
 
+
+
 } 
