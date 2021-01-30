@@ -59,7 +59,7 @@ int main(int argc, char* argv[]){
     double inputs[][3] = {{1.0, 1.0, 0.0}}; 
     double targets[][1] = {{1.0},{0.0}};
     double **inputsT =
-        create_matrix(INPUTS_C,INPUTS_R);   
+        create_matrix(INPUTS_C,INPUTS_R);
     
     for(int i=0;i<1;i++)
     {
@@ -69,10 +69,11 @@ int main(int argc, char* argv[]){
     	printf("inputs %d%d\t %f\n",i,j,inputs[i][j]);
     	}
     }
-    //printM(weights1);
+
+    // Feed forward
     double **hidden = dot_mult(inputsT,1,3, weights1,3,4);
-    //printM(hidden,1,4);
-    //double **temp = transposeM(hidden,1,4);
     double **outputs = dot_mult(transposeM(
-            hidden,1,4),4,1,weights2,4,2);
+                                hidden,1,4),4,1,weights2,4,2);
+
+
 } 
