@@ -15,15 +15,12 @@ double **create_matrix(int m, int n)
         return NULL;
     }
     for(i=0; i<m; ++i, q+=n)
+    {
         p[i] = q;
+    }
+    //printf("Psize= %d,%d\n",sizeof(p),sizeof(p[0]));
     return p;
 }
-
-void populate_matrix(double **p, int m, int n)
-{
- // code to populate matrix here
-}
-
 
 void destroy_matrix(double **p, int m, int n)
 /* Destroy an (m x n) matrix. Notice, the n variable
@@ -36,29 +33,62 @@ void destroy_matrix(double **p, int m, int n)
     free(p);
 }
 
-/* The return type is actually `int (*)[r]`,
-but C doesn't like that. Call this function with
-int (*a)[2] = (int (*)[2])f_MatTrans(2, 3, x); */
-double* transpose(int r, int c, double mat[][c]) {
-    double (*a)[r] = malloc(c*sizeof(*a));
-    for(int i=0; i<r; i++) {
+
+void printM(double **p, int r, int c) {
+	int d1 = sizeof(p)/sizeof(p[0]);
+	int d2 = sizeof(p[0]);
+	for(int i=0; i<r; i++) {
         for(int j=0; j<c; j++) {
-            a[j][i]=mat[i][j];
+            printf("matrix is r=%d c=%d [%d][%d] = %f d1=%d d2=%d\n",
+            	r,c,i,j,p[i][j],d1,d2);
         }
     }
-    for(int i=0; i<r; i++) {
-        for(int j=0; j<c; j++) {
-            printf("X[%d][%d]=%f\n",i,j,mat[i][j]);
-            printf("A[%d][%d]=%f\n",i,j,a[i][j]);
-        }
-    }
-    return *a;
+}
+
+void prefill_matrix(double **p,int r,int c,double d)
+{
+	for(int i=0;i<r;++i)
+	{
+		for(int j=0;j<c;++j)
+		{
+			p[i][j] = d;
+			//printf("p[%d][%d]=%f\n",i,j,p[i][j]);
+		}
+	}
 }
 
 
-void dot_mult(double **p1, double **p2)
+double **dot_mult(double **p1, int r, int c,
+                    double **p2, int x, int y)
 {
-	printf("in mult funtion");
+	assert(c = x);
+	double **p = create_matrix(r, y);
+	for(int i=0;i<r;i++)
+	{
+		for(int j=0;j<r;j++)
+		{
+			for(int k=0;k<y;k++)
+			{
+				p[i][k] += p1[i][j] * p2[j][k];
+			}
+		}
+	}
+
+	return p;
+}
+
+void transposeM(double **q,int r,int c)
+{
+	double **p = create_matrix(c, r);
+	for(int i=0;i<r;++i)
+	{
+		for(int j=0;j<c;++j)
+		{
+			p[j][i] = q[i][j];
+			//printf("p[%d][%d]=%f\n",i,j,p[i][j]);
+		}
+	}
+	return p;
 }
 
 
