@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -15,12 +15,15 @@ double **create_matrix(int m, int n)
         return NULL;
     }
     for(i=0; i<m; ++i, q+=n)
-    {
         p[i] = q;
-    }
-    //printf("Psize= %d,%d\n",sizeof(p),sizeof(p[0]));
     return p;
 }
+
+void populate_matrix(double **p, int m, int n)
+{
+ // code to populate matrix here
+}
+
 
 void destroy_matrix(double **p, int m, int n)
 /* Destroy an (m x n) matrix. Notice, the n variable
@@ -36,51 +39,26 @@ void destroy_matrix(double **p, int m, int n)
 /* The return type is actually `int (*)[r]`,
 but C doesn't like that. Call this function with
 int (*a)[2] = (int (*)[2])f_MatTrans(2, 3, x); */
-void printM(double **p) {
-	int r = sizeof(p[0])/sizeof(p[0][0]);
-	int c = sizeof(p[0][0]);
-	for(int i=0; i<r; i++) {
+double* transpose(int r, int c, double mat[][c]) {
+    double (*a)[r] = malloc(c*sizeof(*a));
+    for(int i=0; i<r; i++) {
         for(int j=0; j<c; j++) {
-            printf("matrix is r=%d c=%d [%d][%d] = %f\n",
-            	r,c,i,j,p[i][j]);
+            a[j][i]=mat[i][j];
         }
-    } 
-}
-
-void prefill_matrix(double **p,int r,int c,double d)
-{
-	for(int i=0;i<r;++i)
-	{
-		for(int j=0;j<c;++j)
-		{
-			p[i][j] = d;
-			//printf("p[%d][%d]=%f\n",i,j,p[i][j]);
-		}
-	}
+    }
+    for(int i=0; i<r; i++) {
+        for(int j=0; j<c; j++) {
+            printf("X[%d][%d]=%f\n",i,j,mat[i][j]);
+            printf("A[%d][%d]=%f\n",i,j,a[i][j]);
+        }
+    }
+    return *a;
 }
 
 
-double **dot_mult(double **p1, double **p2)
+void dot_mult(double **p1, double **p2)
 {
-	
-	int r = sizeof(p1)/sizeof(p1[0]);
-	int c = sizeof(p1[0]);
-	int x = sizeof(p2)/sizeof(p2[0]);
-	int y = sizeof(p2[0]);
-	assert(c = x);
-	double **p = create_matrix(r, y);
-	for(int i=0;i<r;i++)
-	{
-		for(int j=0;j<r;j++)
-		{
-			for(int k=0;k<y;k++)
-			{
-				p[i][k] += p1[i][j] * p2[j][k];
-			}
-		}
-	}
-	
-	return p;
+	printf("in mult funtion");
 }
 
 
