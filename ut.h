@@ -77,7 +77,7 @@ double **dot_mult(double **p1, int r, int c,
 	return p;
 }
 
-void transposeM(double **q,int r,int c)
+double  **transposeM(double **q,int r,int c)
 {
 	double **p = create_matrix(c, r);
 	for(int i=0;i<r;++i)

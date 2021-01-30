@@ -40,9 +40,9 @@ int main(int argc, char* argv[]){
     double **bias2 =
         create_matrix(OUTPUTS,1);
     prefill_matrix(bias2,OUTPUTS,1,0.5);
-    double **outputs =
-        create_matrix(OUTPUTS,1);
-    prefill_matrix(outputs,OUTPUTS,1,0.0);
+    /*double **outputs =
+        create_matrix(OUTPUTS,1); */
+    /* prefill_matrix(outputs,OUTPUTS,1,0.0); */
     double **weights1adj =
         create_matrix(INPUTS_C,HIDDEN_SIZE);
     prefill_matrix(weights1adj,INPUTS_C,HIDDEN_SIZE,0.0);
@@ -71,5 +71,8 @@ int main(int argc, char* argv[]){
     }
     //printM(weights1);
     double **hidden = dot_mult(inputsT,1,3, weights1,3,4);
-    // printM(hidden,1,4);
+    //printM(hidden,1,4);
+    //double **temp = transposeM(hidden,1,4);
+    double **outputs = dot_mult(transposeM(
+            hidden,1,4),4,1,weights2,4,2);
 } 
