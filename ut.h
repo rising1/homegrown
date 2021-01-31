@@ -104,7 +104,7 @@ double **math(char *s, double **p1, int r, int c,
 		{
            // if(strcmp(s, 'minus') = 0)
             {
-                printf("need to subtract");
+                printf("need to subtract matrices");
             }
 		}
 	}
