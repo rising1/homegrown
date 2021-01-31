@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 double **create_matrix(int m, int n)
 {
@@ -65,7 +66,7 @@ double **dot_mult(double **p1, int r, int c,
 	double **p = create_matrix(r, y);
 	for(int i=0;i<r;i++)
 	{
-		for(int j=0;j<r;j++)
+		for(int j=0;j<c;j++)
 		{
 			for(int k=0;k<y;k++)
 			{
@@ -91,4 +92,22 @@ double  **transposeM(double **q,int r,int c)
 	return p;
 }
 
+double **math(char *s, double **p1, int r, int c,
+                    double **p2, int x, int y)
+{
+	assert(r == x && c == y);
 
+	double **p = create_matrix(r, y);
+	for(int i=0;i<r;i++)
+	{
+		for(int j=0;j<c;j++)
+		{
+           // if(strcmp(s, 'minus') = 0)
+            {
+                printf("need to subtract");
+            }
+		}
+	}
+
+	return p;
+}

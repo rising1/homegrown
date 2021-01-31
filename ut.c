@@ -74,6 +74,7 @@ int main(int argc, char* argv[]){
     double **hidden = dot_mult(inputsT,1,3, weights1,3,4);
     double **outputs = dot_mult(transposeM(
                                 hidden,1,4),4,1,weights2,4,2);
-
-
+    printM(outputs,1,2);
+    /*double **error = math('minus',targets,2,1,
+                            ) */
 } 
