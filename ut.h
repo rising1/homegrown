@@ -62,7 +62,7 @@ void prefill_matrix(double **p,int r,int c,double d)
 double **dot_mult(double **p1, int r, int c,
                     double **p2, int x, int y)
 {
-	assert(c = x);
+	assert(c == x);
 	double **p = create_matrix(r, y);
 	for(int i=0;i<r;i++)
 	{
@@ -75,6 +75,25 @@ double **dot_mult(double **p1, int r, int c,
 		}
 	}
 
+	return p;
+}
+
+
+double **plain_mult(double **p1, int r, int c,
+                    double **p2, int x, int y)
+{
+	assert(c == x);
+	double **p = create_matrix(r, y);
+	for(int i=0;i<r;i++)
+	{
+		for(int j=0;j<c;j++)
+		{
+			for(int k=0;k<y;k++)
+			{
+				p[i][k] = p1[i][j] * p2[j][k];
+			}
+		}
+	}
 	return p;
 }
 
@@ -92,22 +111,42 @@ double  **transposeM(double **q,int r,int c)
 	return p;
 }
 
-double **math(char *s, double **p1, int r, int c,
+double **math(char s, double **p1, int r, int c,
                     double **p2, int x, int y)
 {
 	assert(r == x && c == y);
-
 	double **p = create_matrix(r, y);
 	for(int i=0;i<r;i++)
 	{
 		for(int j=0;j<c;j++)
 		{
-           // if(strcmp(s, 'minus') = 0)
+           if(s == '-')
             {
-                printf("need to subtract matrices");
+                p[i][j]=p1[i][j]-p2[i][j];
+            }
+           if(s == 'x')
+            {
+                p[i][j]=p1[i][j]*p2[i][j];
+            }
+           if(s == '+')
+            {
+                p[i][j]=p1[i][j]+p2[i][j];
             }
 		}
 	}
+	return p;
+}
 
+double  **times(double **q,int r,int c, double factor)
+{
+	double **p = create_matrix(r, c);
+	for(int i=0;i<r;++i)
+	{
+		for(int j=0;j<c;++j)
+		{
+			p[i][j] = q[i][j] * factor;
+			//printf("p[%d][%d]=%f\n",i,j,p[i][j]);
+		}
+	}
 	return p;
 }
