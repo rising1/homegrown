@@ -149,4 +149,19 @@ double  **times(double **q,int r,int c, double factor)
 		}
 	}
 	return p;
+
+double **mse(double **q, int r,int c)
+{
+    double **p = create_matrix(1,1);
+    for(int i=0;i<r;++i)
+    {
+		for(int j=0;j<c;++j)
+		{
+			p[0][0] = p[0][0] + q[i][j] * q[i][j];
+			//printf("p[%d][%d]=%f\n",i,j,p[i][j]);
+		}
+	}
+	return p;
+}
+
 }

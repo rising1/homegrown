@@ -14,7 +14,6 @@ int main(int argc, char* argv[]){
 	double **hidden;
 	double **outputs;
 	double **error;
-	double **mse;
 	double **dA_dZ;
 	double **dH_dZ;
 	double **act_err;
@@ -82,9 +81,8 @@ int main(int argc, char* argv[]){
     error = math('-',
     		transposeM(targetsT,1,2),2,1,
             transposeM(outputs, 1, 2),2,1);
-    mse = math('x',error, OUTPUTS_C, 1, error, OUTPUTS_C, 1);
 
-    //printM(error, 2, 1);
+    printf(mse(error, OUTPUTS_C, 1), 1, 1);
 
     // Backpropagation
 
