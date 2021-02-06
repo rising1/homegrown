@@ -149,10 +149,11 @@ double  **times(double **q,int r,int c, double factor)
 		}
 	}
 	return p;
-
+}
 double **mse(double **q, int r,int c)
 {
     double **p = create_matrix(1,1);
+    p[0][0] = 0.0;
     for(int i=0;i<r;++i)
     {
 		for(int j=0;j<c;++j)
@@ -164,4 +165,4 @@ double **mse(double **q, int r,int c)
 	return p;
 }
 
-}
+

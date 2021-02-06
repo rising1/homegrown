@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]){
 
 	double lr = 0.01;
-	int no_of_iterations = 10;
+	int no_of_iterations = 10000;
 
 	double **hidden;
 	double **outputs;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]){
     		transposeM(targetsT,1,2),2,1,
             transposeM(outputs, 1, 2),2,1);
 
-    printf(mse(error, OUTPUTS_C, 1), 1, 1);
+    printf("mse= %f\n",(double)mse(error, OUTPUTS_C, 1)[0][0]);
 
     // Backpropagation
 
@@ -118,7 +118,7 @@ int main(int argc, char* argv[]){
     }
 
     act_err = math('x',dA_dZ,2,1,error,2,1);
-    printM(act_err, 2, 1);
+    //printM(act_err, 2, 1);
 
     weights2adj = times(plain_mult(
     				transposeM(hidden, 1, 4),4,1,
@@ -149,7 +149,8 @@ int main(int argc, char* argv[]){
     				weights1adj,INPUTS_C,HIDDEN_SIZE);
     bias1 = math('+',bias1,1,HIDDEN_SIZE,
     				bias1adj,1,HIDDEN_SIZE);
-    weights2 = math('+',weights2,HIDDEN_SIZE,OUTPUTS_C			,weights2adj,HIDDEN_SIZE,OUTPUTS_C);
+    weights2 = math('+',weights2,HIDDEN_SIZE,OUTPUTS_C
+                        ,weights2adj,HIDDEN_SIZE,OUTPUTS_C);
     bias2 = math('+',bias2,1,OUTPUTS_C,
     				bias2adj,1,OUTPUTS_C);
 
