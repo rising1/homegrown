@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]){
 
 	double lr = 0.01;
-	int no_of_iterations = 10000;
+	int no_of_iterations = 1000;
 
 	double **hidden;
 	double **outputs;
@@ -155,5 +155,7 @@ int main(int argc, char* argv[]){
     				bias2adj,1,OUTPUTS_C);
 
     }
-       // destroy_matrix(weights1,INPUTS_C, HIDDEN_SIZE);
+    //destroy_matrix(weights1,INPUTS_C, HIDDEN_SIZE);
+    //destroy_matrix(weights1,HIDDEN_SIZE,INPUTS_C);
+    //free(weights1);
 } 
