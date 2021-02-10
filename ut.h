@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -23,14 +23,11 @@ double **create_matrix(int m, int n)
     return p;
 }
 
-void destroy_matrix(double **p, int m, int n)
+void destroy_matrix(double **p)
 /* Destroy an (m x n) matrix. Notice, the n variable
 * is not used, it is just there to assist using the function. */
 {
-    int i;
-    assert(m>0 && n>0);
-    for (i = 0; i < m; ++i)
-        free(p[i]);
+    free(p[0]);
     free(p);
 }
 
