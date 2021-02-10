@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
     for(int n=0;n<no_of_iterations;n++)
     {
   
-    for(int w=0;w<4;w++)
+    for(int w=0;w<5;w++)
     {	
     	for(int x=0;x<3;x++)
     	{

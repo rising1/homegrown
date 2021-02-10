@@ -147,6 +147,7 @@ double  **times(double **q,int r,int c, double factor)
 	}
 	return p;
 }
+
 double **mse(double **q, int r,int c)
 {
     double **p = create_matrix(1,1);
