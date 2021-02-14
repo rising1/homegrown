@@ -9,8 +9,8 @@
 int main(int argc, char* argv[]){
 
 	double lr = 0.01;
-	int no_of_iterations = 200;
-	
+	int no_of_iterations = 1000;
+	double starting_value = 1;
 
 	double **hidden;
 	double **outputs;
@@ -47,17 +47,17 @@ int main(int argc, char* argv[]){
 
     double **weights1 =
         create_matrix(INPUTS_C,HIDDEN_SIZE);
-    prefill_matrix(weights1,INPUTS_C,HIDDEN_SIZE,0.5);
+    prefill_matrix(weights1,INPUTS_C,HIDDEN_SIZE,starting_value);
     // printM(weights1,INPUTS_C,HIDDEN_SIZE);
     double **bias1 =
         create_matrix(HIDDEN_SIZE,1);
-    prefill_matrix(bias1,HIDDEN_SIZE,1,0.5);
+    prefill_matrix(bias1,HIDDEN_SIZE,1,starting_value);
     double **weights2 =
         create_matrix(HIDDEN_SIZE,OUTPUTS_C);
-    prefill_matrix(weights2,HIDDEN_SIZE,OUTPUTS_C,0.5);
+    prefill_matrix(weights2,HIDDEN_SIZE,OUTPUTS_C,starting_value);
     double **bias2 =
         create_matrix(OUTPUTS_C,1);
-    prefill_matrix(bias2,OUTPUTS_C,1,0.5);
+    prefill_matrix(bias2,OUTPUTS_C,1,starting_value);
 
     double **inputsT =
         create_matrix(INPUTS_C,INPUTS_R);
@@ -202,8 +202,7 @@ int main(int argc, char* argv[]){
     outputs = dot_mult(transposeM(
        hidden,1,4),1,4,weights2,4,2);
     printM(outputs, 1, 2);
-    
-    
+
     
    destroy_matrix(weights1); 
    destroy_matrix(weights1adj);
