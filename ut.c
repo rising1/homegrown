@@ -1,13 +1,13 @@
 ﻿#include "ut.h"
 
-#define HIDDEN_SIZE 4
+#define HIDDEN_SIZE 5
 #define OUTPUTS_R 1
 #define OUTPUTS_C 2
 
 int main(int argc, char* argv[]){
 
 	double lr = 0.01;
-	int no_of_iterations = 1;
+	int no_of_iterations = 10000;
 	double starting_value = 1;
 
 	int batchsize;
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
     					   {1.0, 0.0},
     					   {0.0, 0.0}
     					  };
-    double test[][3] = {{0.0, 1.0, 0.0}};
+    double test[][3] = {{0.0, 1.0, 1.0}};
 
     printf("argc %d\n",argc);
     for(int i=0;i<argc;i++)
