@@ -1,13 +1,13 @@
 ﻿#include "ut.h"
 
-#define HIDDEN_SIZE 5
+#define HIDDEN_SIZE 4
 #define OUTPUTS_R 1
 #define OUTPUTS_C 2
 
 int main(int argc, char* argv[]){
 
-	double lr = 0.01;
-	int no_of_iterations = 10000;
+	double lr = 0.1;
+	int no_of_iterations = 1;
 	double starting_value = 1;
 
 	int batchsize;
@@ -221,6 +221,22 @@ int main(int argc, char* argv[]){
     			HIDDEN_SIZE,weights2,HIDDEN_SIZE,
     			OUTPUTS_C);
     printM(outputs, 1, OUTPUTS_C);
+
+    if (argc > 1 && argv[1] == "t")
+    {
+    	printf("in tests routines \n");
+    	double **dot_mult_test;
+    	double tests1d[][3] = {{1.0, 1.0, 1.0}};
+    	double tests2d[][4] = {{1.0, 1.0, 1.0, 1.0},
+    						   {1.0, 1.0, 1.0, 1.0},
+    						   {1.0, 1.0, 1.0, 1.0}
+    						   };
+    	double **tests1dp = &tests1d;
+        double **tests2dp = &tests2d;
+    	dot_mult(tests1dp,1,3,tests2dp,3,4);
+
+    	destroy_matrix(dot_mult_test);
+    }
 
     
    destroy_matrix(weights1); 
