@@ -222,23 +222,26 @@ int main(int argc, char* argv[]){
     			OUTPUTS_C);
     printM(outputs, 1, OUTPUTS_C);
 
-    if (argc > 1 && argv[1] == "t")
+    // if (argc > 1 && argv[1] == "t")
+    if (argc > 1 )
     {
     	printf("in tests routines \n");
     	double **dot_mult_test;
-    	double tests1d[][3] = {{1.0, 1.0, 1.0}};
-    	double tests2d[][4] = {{1.0, 1.0, 1.0, 1.0},
-    						   {1.0, 1.0, 1.0, 1.0},
-    						   {1.0, 1.0, 1.0, 1.0}
-    						   };
-    	double **tests1dp = &tests1d;
-        double **tests2dp = &tests2d;
-    	dot_mult(tests1dp,1,3,tests2dp,3,4);
+    	double **tests1d = create_matrix(1,3);
+    	prefill_matrix(tests1d,1,3,1);
+    	double **tests2d = create_matrix(3,4);
+    	prefill_matrix(tests2d,3,4,1);
+
+
+    	dot_mult_test = dot_mult(tests1d,1,3,tests2d,3,4);
 
     	destroy_matrix(dot_mult_test);
+    	destroy_matrix(tests1d);
+    	destroy_matrix(tests2d);
     }
 
-    
+   printf("argc= %d\n", argc);
+   printf("argv[1]= %s\n", argv[1]);
    destroy_matrix(weights1); 
    destroy_matrix(weights1adj);
    destroy_matrix(weights2);
