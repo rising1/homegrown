@@ -257,6 +257,16 @@ int main(int argc, char* argv[]){
     	}
     	//printf(" total of plain_mult_test= %f\n",total);
     	assert(total == 8);
+    	plain_mult_test = plain_mult(tests1d,1,3,
+    	                             tests2d,3,4);
+    	for(int i=0;i<1;i++){
+    	    for(int j=0;j<4;j++){
+    	        //assert(plain_mult_test[i][j] == 0.5);
+    	        total = total + plain_mult_test[i][j];
+    	    }
+    	}
+    	printf(" total of plain_mult_test= %f\n",total);
+    	assert(total == 8);
     	// ********** end of plain_mult test routine
 
     	destroy_matrix(dot_mult_test);
