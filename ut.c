@@ -177,7 +177,7 @@ int main(int argc, char* argv[]){
     				 HIDDEN_SIZE),HIDDEN_SIZE,1,
     				transposeM(act_err,OUTPUTS_C,
     				1),1,OUTPUTS_C),
-    				HIDDEN_SIZE,2,
+    				HIDDEN_SIZE,OUTPUTS_C,
     				lr);
    bias2adj = times(transposeM(act_err,OUTPUTS_C,
     			1),1,OUTPUTS_C,lr);
