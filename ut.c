@@ -7,7 +7,7 @@
 int main(int argc, char* argv[]){
 
 	double lr = 0.1;
-	int no_of_iterations = 1;
+	int no_of_iterations = 10;
 	double starting_value = 1;
 
 	int batchsize;
@@ -226,13 +226,16 @@ int main(int argc, char* argv[]){
     if (argc > 1 )
     {
     	printf("in tests routines \n");
-    	// ********** dot_mult test routine
-    	double **dot_mult_test;
+
     	double **tests1d = create_matrix(1,3);
     	prefill_matrix(tests1d,1,3,0.25);
     	double **tests2d = create_matrix(3,4);
     	prefill_matrix(tests2d,3,4,1);
+    	double **tests3d = create_matrix(4,3);
+    	prefill_matrix(tests3d,4,3,0.5);
 
+    	// ********** dot_mult test routine
+    	double **dot_mult_test;
     	dot_mult_test = dot_mult(tests1d,1,3,tests2d,3,4);
     	for(int i=0;i<1;i++){
     	    for(int j=0;j<4;j++){
@@ -243,17 +246,24 @@ int main(int argc, char* argv[]){
 
     	// ********** plain_mult test routine
     	double **plain_mult_test;
-    	plain_mult_test = plain_mult(tests1d,1,3,tests2d,3,4);
-    	for(int i=0;i<1;i++){
+    	double total = 0.0;
+    	plain_mult_test = plain_mult(tests3d,4,3,
+    	                             tests2d,3,4);
+    	for(int i=0;i<4;i++){
     	    for(int j=0;j<4;j++){
-    	        assert(plain_mult_test[i][j] == 0.25);
+    	        assert(plain_mult_test[i][j] == 0.5);
+    	        total = total + plain_mult_test[i][j];
     	    }
     	}
+    	//printf(" total of plain_mult_test= %f\n",total);
+    	assert(total == 8);
     	// ********** end of plain_mult test routine
 
     	destroy_matrix(dot_mult_test);
+    	destroy_matrix(plain_mult_test);
     	destroy_matrix(tests1d);
     	destroy_matrix(tests2d);
+    	destroy_matrix(tests3d);
     }
 
    printf("argc= %d\n", argc);
