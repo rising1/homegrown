@@ -79,15 +79,35 @@ double **dot_mult(double **p1, int r, int c,
 double **plain_mult(double **p1, int r, int c,
                     double **p2, int x, int y)
 {
-	assert(c == x);
-	double **p = create_matrix(r, y);
-	for(int i=0;i<r;i++)
+	assert(c == x && (r == 1 || x == 1));
+    double **p;
+	int maxrow, maxcol, minrow, mincol;
+
+	if(r >= y){
+	    p = create_matrix(r, c);
+	    maxrow = r;
+	    maxcol = c;
+	    minrow = x;
+	    mincol = y;
+	} else{
+	    p = create_matrix(x, y);
+	    maxrow = x;
+	    maxcol = y;
+	    minrow = r;
+	    mincol = c;
+	}
+
+	for(int i=0;i<maxrow;i++)
 	{
-		for(int j=0;j<c;j++)
+		for(int j=0;j<minrow;j++)
 		{
-			for(int k=0;k<y;k++)
+			for(int k=0;k<minrow;k++)
 			{
-				p[i][k] = p1[i][j] * p2[j][k];
+			    if(r >= y){
+				    p[i][j] = p1[i][j] * p2[j][k];
+				 } else {
+				    p[i][j] = p2[i][j] * p1[j][k];
+				 }
 			}
 		}
 	}
