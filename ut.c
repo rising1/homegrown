@@ -6,9 +6,10 @@
 
 int main(int argc, char* argv[]){
 
-	double lr = 0.1;
-	int no_of_iterations = 10;
-	double starting_value = 1;
+	double lr = 0.01;
+	int no_of_iterations = 	2000;
+	double starting_value = 0;
+	int report_interval = 10;
 
 	int batchsize;
 	int inputs_size;
@@ -25,12 +26,14 @@ int main(int argc, char* argv[]){
 	double **bias1adj;
 	double **mseP;
 
+	//double batch[][3] =  {{1.0, 1.0, 0.0}};
 
 	double batch[][3] =  {{1.0, 1.0, 0.0},
 						  {1.0, 0.0, 0.0},
 						  {1.0, 0.0, 1.0},
 						  {1.0, 1.0, 1.0},
-						  {0.0, 0.0, 0.0}
+						  {0.0, 0.0, 0.0},
+						  {0.0, 1.0, 1.0},
 						  };
 
 	/*printf("sizeof batch= %d\n",sizeof(batch));
@@ -40,13 +43,25 @@ int main(int argc, char* argv[]){
 	inputs_size = (sizeof(batch[0])/
 						  sizeof(batch[0][0]));
 	printf("sizeof inputs= %d\n",inputs_size);
+
+  // double targets[][2] = {{1.0, 0.0}};
+
     double targets[][2] = {{1.0, 0.0},
     					   {0.0, 0.0},
     					   {0.0, 0.0},
     					   {1.0, 0.0},
-    					   {0.0, 0.0}
+    					   {0.0, 0.0},
+    					   {1.0, 0.0}
     					  };
-    double test[][3] = {{0.0, 1.0, 1.0}};
+    /*    double targets[][2] = {{1.0},
+    					   {0.0},
+    					   {0.0},
+    					   {1.0},
+    					   {0.0},
+    					   {1.0}
+    					  }	;		*/
+
+    double test[][3] = {{0.0, 0.0, 1.0}};
 
     printf("argc %d\n",argc);
     for(int i=0;i<argc;i++)
@@ -122,9 +137,12 @@ int main(int argc, char* argv[]){
     // Feed forward
     hidden = dot_mult(inputsT,1,inputs_size,
     		weights1,inputs_size,HIDDEN_SIZE);
+    hidden = math('+', hidden, 1, HIDDEN_SIZE, bias1, 1, HIDDEN_SIZE);
+
     //printM(hidden, 1, 4);
     outputs = dot_mult(transposeM(
               hidden,1,HIDDEN_SIZE),1,HIDDEN_SIZE,weights2,HIDDEN_SIZE,OUTPUTS_C);
+    outputs = math('+', outputs, 1, OUTPUTS_C, bias2, 1, OUTPUTS_C);
     //printM(outputs, 1, 2);
 
 	// Calc error
@@ -132,8 +150,12 @@ int main(int argc, char* argv[]){
     		transposeM(targetsT,1,OUTPUTS_C),
     		OUTPUTS_C,1,transposeM(outputs, 1,
     		OUTPUTS_C),OUTPUTS_C,1);
+    //printf("error= %f %f\n",error[0][0],error[1][0]);
 	mseP = mse(error,OUTPUTS_C,1);
-    printf("mse= %f\n",mseP[0][0]);
+    if (n%report_interval == 0){
+        printf("error= %f %f\n",error[0][0],error[1][0]);
+        printf("mse= %f\n",mseP[0][0]);
+        }
 
     // Backpropagation
 
@@ -170,6 +192,7 @@ int main(int argc, char* argv[]){
 
     act_err = math('x',dA_dZ,OUTPUTS_C,
     			1,error,OUTPUTS_C,1);
+    act_err = times(act_err,OUTPUTS_C,1,2);
     //printM(act_err, 2, 1);
 
     weights2adj = times(plain_mult(
@@ -216,10 +239,12 @@ int main(int argc, char* argv[]){
     // Feed forward test
     hidden = dot_mult(testT,1,inputs_size,
     		 weights1,inputs_size,HIDDEN_SIZE);
+    hidden = math('+', hidden, 1, HIDDEN_SIZE, bias1, 1, HIDDEN_SIZE);
     outputs = dot_mult(transposeM(
        			hidden,1,HIDDEN_SIZE),1,
     			HIDDEN_SIZE,weights2,HIDDEN_SIZE,
     			OUTPUTS_C);
+    outputs = math('+', outputs, 1, OUTPUTS_C, bias2, 1, OUTPUTS_C);
     printM(outputs, 1, OUTPUTS_C);
 
     // if (argc > 1 && argv[1] == "t")
@@ -278,11 +303,11 @@ int main(int argc, char* argv[]){
 
    printf("argc= %d\n", argc);
    printf("argv[1]= %s\n", argv[1]);
-   destroy_matrix(weights1); 
+   destroy_matrix(weights1);
    destroy_matrix(weights1adj);
    destroy_matrix(weights2);
-   destroy_matrix(weights2adj);   
-   destroy_matrix(bias1); 
+   destroy_matrix(weights2adj);
+   destroy_matrix(bias1);
    destroy_matrix(bias1adj);
    destroy_matrix(bias2);
    destroy_matrix(bias2adj);
@@ -295,4 +320,4 @@ int main(int argc, char* argv[]){
    destroy_matrix(act_err);
    destroy_matrix(hidden);
    destroy_matrix(outputs);
-} 
+}

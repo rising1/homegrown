@@ -61,6 +61,7 @@ double **dot_mult(double **p1, int r, int c,
 {
 	assert(c == x);
 	double **p = create_matrix(r, y);
+	prefill_matrix(p,r,y, 0.0);
 	for(int i=0;i<r;i++)
 	{
 		for(int j=0;j<c;j++)
@@ -81,6 +82,7 @@ double **plain_mult(double **p1, int r, int c,
 {
 	assert(c == x);
 	double **p = create_matrix(r, y);
+	prefill_matrix(p, r, y, 0.0);
 	for(int i=0;i<r;i++)
 	{
 		for(int j=0;j<c;j++)
@@ -113,6 +115,7 @@ double **math(char s, double **p1, int r, int c,
 {
 	assert(r == x && c == y);
 	double **p = create_matrix(r, y);
+	prefill_matrix(p, r,y, 0.0);
 	for(int i=0;i<r;i++)
 	{
 		for(int j=0;j<c;j++)
@@ -137,6 +140,7 @@ double **math(char s, double **p1, int r, int c,
 double  **times(double **q,int r,int c, double factor)
 {
 	double **p = create_matrix(r, c);
+	prefill_matrix(p,r,c,0.0);
 	for(int i=0;i<r;++i)
 	{
 		for(int j=0;j<c;++j)
@@ -162,5 +166,6 @@ double **mse(double **q, int r,int c)
 	}
 	return p;
 }
+
 
 
